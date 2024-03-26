@@ -34,7 +34,7 @@ GA_feature_selection.py was ran with the following conditions (python3 GA_featur
 	- Generations: 50 
 
 The following result was acquired: 
-![The figure illustrates the lowest AIC values acquired for each generation, running GA_feature_selection.py.](image_url)
+![The figure illustrates the lowest AIC values acquired for each generation, running GA_feature_selection.py.]([image_url](https://github.com/AndrewBergman1/mGPS_GA/blob/main/fitness.png))
 
 
 ### Immediate actions to take: 
