@@ -6,6 +6,7 @@
 import pandas as pd
 import random as rd
 import statsmodels.api as sm
+import matplotlib.pyplot as plt
 
 
 # Loads the CSV-file as a data frame
@@ -51,45 +52,100 @@ def initialize_population(predictors) :
         population.append(individual)
     return population
 
-
-
-#This doesnt work!!
 def evaluate_fitness(population, predictors, response_variables) :
-
     # Loop through the individuals in the population
-    for individual in population :
-        # Include the predictors where the individual's char = 1
-        # Fit a model to the predictor variables and the response variables
+    models = []
+    for index, individual in enumerate(population) :
+        # Include the predictors where the individual's char = 1 
+        selected_predictors = [index for index, char in enumerate(individual) if char == 1] #Contains indices of the predictors to be included in the model.
+        
+        # These are the corresponding predictors 
+        selected_predictors = [index for index, predictor in enumerate(predictors) if index in selected_predictors]
+        #selected_predictors_names = [predictors.columns[index] for index in selected_predictors]
+        selected_predictor_data = predictors.iloc[:, selected_predictors]
 
-        # Fit the model
-        model = sm.OLS(response_variables.iloc[:, 0], selected_predictors).fit()
-        model2 = sm.OLS(response_variables.iloc[:, 1], selected_predictors).fit()
+        # Retrieve the correspodning data to a data frame
+        #print(selected_predictors)
+        # Fit a model to the predictor variables and the latitude! 
+        model = sm.OLS(response_variables.iloc[:, 0], selected_predictor_data).fit()
+        #model2 = sm.OLS(response_variables.iloc[:, 1], selected_predictors).fit()
 
-        # To see the coefficients of the model
+        # Model number, AIC value and the genetic composition of that individual
+        model = [index, model.aic, individual]
+        models.append(model)
+    return models
 
-    print(model.summary())
+def rank_population(models) : 
+    sorted_list = sorted(models, key=lambda x: x[1]) # Sorts the list based on the 2nd element (AIC value)
+
+    return sorted_list
+
+# Single point crossover
+def select_parents(sorted_models) :
+    parents = [sorted_models[0], sorted_models[1]]
+    return parents 
+    
+def crossover(parents) :
+    p1 = parents[0][2]
+    p2 = parents[1][2]
+
+    offspring_population = []
+
+    # Create 50 offspring 
+    for offspring_number in range(50) :
+        crossover_point = int(rd.random()*len(p1))
+        offspring = p1[0:crossover_point] + p2[crossover_point:]
+        offspring_population.append(offspring)
+    
+    return offspring_population
+
+def mutate_offspring(offspring_population) :
+    mutation_rate = 0.01
+
+    for offspring in offspring_population :
+        for gene in offspring : 
+            mutation_coef = rd.random()
+
+            if mutation_coef < mutation_rate :
+                if gene == 1 : 
+                    gene = 0
+                elif gene == 0: 
+                    gene = 1 
+    return offspring_population
+
+def run_GA(population, predictors, response_variables) :        
+    models = evaluate_fitness(population, predictors, response_variables)
+    # Sorts based on AIC (2nd element in list)
+    sorted_models = rank_population(models)
+
+    #print(sorted_models)
+    # Selects the best suited parents (2, can be changed later)
+    parents = select_parents(sorted_models)
+
+    offspring_population = crossover(parents)
+
+    # mutates each offspring (p = 0.01 for each gene)
+    population = mutate_offspring(offspring_population)
+
+    return population, sorted_models[0]
 
 
-
-
-#def select_parental_chromosomes() :
-
-#def perform_crossover() :
-
-#def mutate_individuals() : 
-
-
-
-#abundance_df, meta_df = load_data_file(metadata_file="/home/andrew/Documents/GA_feature_selection/complete_metadata.csv", abundance_file="/home/andrew/Documents/GA_feature_selection/metasub_taxa_abundance.csv")
+#abundance_df, meta_df = load_data_file(metadata_file="/home/andrewbergman/courses/mGPS_GA/complete_metadata.csv", abundance_file="/home/andrewbergman/courses/mGPS_GA/metasub_taxa_abundance.csv")
 #df = import_coordinates(abundance_df, meta_df)
-
-#
 #df.to_csv('df.csv', index=False)
-df = pd.read_csv('/home/andrew/Documents/GA_feature_selection/first_100') # THIS DATAFRAME CONTAINS THE FIRST 100 ROWS
 
+df = pd.read_csv('/home/andrewbergman/courses/mGPS_GA/first_500_trimmed') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
-response_variables = extract_response_variables(df)
-initial_population =initialize_population(predictors)
+response_variables = extract_response_variables(df)  
+population =initialize_population(predictors)
 
-# This function doesnt work! 
-#evaluate_fitness(initial_population, predictors, response_variables)
+best_models  = []
+for i in range(10):
+    population, best_model_info = run_GA(population, predictors, response_variables)
+    best_model = best_model_info[1]  
+
+    best_models.append(best_model)
+
+x = range(len(best_models))
+plt.plot(x, best_models)
+plt.savefig('fitness.png')
