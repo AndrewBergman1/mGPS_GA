@@ -1,5 +1,15 @@
 # Genetic algorithm for feature selection in metasub dataset.
 
+# python3 GA_feature_selection.py 0.3 0.9 0.2 50 50 4 50
+    # min crossover point: 0.3
+    # max crossover point: 0.9
+    # mutation chance: 20%
+    # number of offspring: 50
+    # initial population: 50 
+    # reproductive units: 4 
+    # Generations: 50 
+
+
 # Create a starting population of 10 individuals with either 1 or 0, 
 # representing the presence of microorganisms in the multiple linear regression to follow.
 
@@ -7,7 +17,10 @@ import pandas as pd
 import random as rd
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
+import sys 
 
+#Sets the seed
+rd.seed(42)
 
 # Loads the CSV-file as a data frame
 def load_data_file(abundance_file, metadata_file) :
@@ -19,7 +32,6 @@ def import_coordinates(abundance_df, meta_df) :
     coordinates = meta_df[['uuid', 'city_longitude', 'city_latitude']] #Retrieve all UUIDs and their corresponding coordinates
     df = pd.merge(abundance_df, coordinates, on='uuid', how="inner")
     return df
-
 
 def extract_predictors(df) :
     columns = [col for col in df.columns if col not in ['city_longitude', 'city_latitude', 'uuid']]
@@ -35,12 +47,12 @@ def extract_response_variables(df) :
 
     return df[columns]
 
-def initialize_population(predictors) :
+def initialize_population(predictors, init_pop_size) :
     td = 0.5
 
     population = []
 
-    for individual_number in range(10) : 
+    for individual_number in range(init_pop_size) : 
         individual = [] # This holds thebinary representation oforganisms
 
         for predictor in predictors : 
@@ -62,7 +74,7 @@ def evaluate_fitness(population, predictors, response_variables) :
         # These are the corresponding predictors 
         selected_predictors = [index for index, predictor in enumerate(predictors) if index in selected_predictors]
         #selected_predictors_names = [predictors.columns[index] for index in selected_predictors]
-        selected_predictor_data = predictors.iloc[:, selected_predictors]
+        selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
 
         # Retrieve the correspodning data to a data frame
         #print(selected_predictors)
@@ -81,37 +93,47 @@ def rank_population(models) :
     return sorted_list
 
 # Single point crossover
-def select_parents(sorted_models) :
-    parents = [sorted_models[0], sorted_models[1]]
+def select_parents(sorted_models, reproductive_units) :
+    #parents = [sorted_models[0], sorted_models[1]]
+    parents = [model for index, model in enumerate(sorted_models) if index <= reproductive_units]
+
     return parents 
-    
-def crossover(parents) :
-    p1 = parents[0][2]
-    p2 = parents[1][2]
+
+
+# I need to change this to something for reasonable. Currently, you can select the number of parentts that enter a lottery. 
+# Option 1: Best parent gets to mate with random other parent.
+# Option 2: All parents above the threshold mate randomly to produce the offspring.
+# Option 3: The best mates with many, the second best mates with a few, the third best mates with fewer... etc ...
+def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units) :
+    selected_parents = [parent[2] for index, parent in enumerate(parents) if index <= reproductive_units]
+
+    while True:
+        p1_choice, p2_choice = rd.sample(range(len(selected_parents)), 2)
+        if p1_choice != p2_choice:
+            break
+
+    p1 = selected_parents[p1_choice]
+    p2 = selected_parents[p2_choice]
+
 
     offspring_population = []
 
     # Create 50 offspring 
-    for offspring_number in range(50) :
-        crossover_point = int(rd.random()*len(p1))
+    for offspring_number in range(no_offspring) :
+        crossover_point = int(rd.uniform(crossover_min, crossover_max)*len(p1))
         offspring = p1[0:crossover_point] + p2[crossover_point:]
         offspring_population.append(offspring)
     
     return offspring_population
 
-def mutate_offspring(offspring_population) :
-    mutation_rate = 0.01
-
-    for offspring in offspring_population :
-        for gene in offspring : 
+def mutate_offspring(offspring_population, mutation_rate):
+    for offspring in offspring_population:
+        for i in range(len(offspring)):
             mutation_coef = rd.random()
-
-            if mutation_coef < mutation_rate :
-                if gene == 1 : 
-                    gene = 0
-                elif gene == 0: 
-                    gene = 1 
-    return offspring_population
+            if mutation_coef < mutation_rate:
+                # Directly mutate the gene in the offspring list
+                offspring[i] = 0 if offspring[i] == 1 else 1
+    return offspring_population  # Ensure this line is present to return the modified population
 
 def run_GA(population, predictors, response_variables) :        
     models = evaluate_fitness(population, predictors, response_variables)
@@ -120,32 +142,55 @@ def run_GA(population, predictors, response_variables) :
 
     #print(sorted_models)
     # Selects the best suited parents (2, can be changed later)
-    parents = select_parents(sorted_models)
+    parents = select_parents(sorted_models, reproductive_units)
 
-    offspring_population = crossover(parents)
+    offspring_population = crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units)
 
     # mutates each offspring (p = 0.01 for each gene)
-    population = mutate_offspring(offspring_population)
+    population = mutate_offspring(offspring_population, mutation_rate)
 
     return population, sorted_models[0]
 
+def save_png(best_models):
+    plt.figure(figsize=(19.2, 10.2))
+    x = range(len(best_models))
+    plt.plot(x, best_models, marker='o')  # Plot the points with a marker
+    # Annotate each point with its y-value
+    for i, value in enumerate(best_models):
+        plt.text(x[i], value, f"{value:.2f}", horizontalalignment='left', verticalalignment='bottom', fontsize=9)  
+    plt.title("Min CP: " + str(sys.argv[1]) + ", " + " Max  CP: " + str(sys.argv[2]) + ", " + " Mut. Prob. " + str(sys.argv[3]) + ", " + " No. Offspring: " + str(sys.argv[4]) + ", " + " Init pop size: " + str(sys.argv[5]) + ", " + " Reproductive Units: " + str(sys.argv[6]) + ", " + " Generations: " + str(sys.argv[7]))
+    plt.savefig('fitness.png')  # Save the figure after all annotations
+    
 
 #abundance_df, meta_df = load_data_file(metadata_file="/home/andrewbergman/courses/mGPS_GA/complete_metadata.csv", abundance_file="/home/andrewbergman/courses/mGPS_GA/metasub_taxa_abundance.csv")
 #df = import_coordinates(abundance_df, meta_df)
 #df.to_csv('df.csv', index=False)
 
-df = pd.read_csv('/home/andrewbergman/courses/mGPS_GA/first_500_trimmed') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
+crossover_min = float(sys.argv[1])
+crossover_max = float(sys.argv[2])
+mutation_rate = float(sys.argv[3])
+no_offspring = int(sys.argv[4])
+init_pop_size = int(sys.argv[5])
+reproductive_units = int(sys.argv[6]) - 1
+no_generations = int(sys.argv[7])
+
+df = pd.read_csv('/home/andrewbergman/courses/mGPS_GA/first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
-population =initialize_population(predictors)
+population =initialize_population(predictors, init_pop_size)
 
 best_models  = []
-for i in range(10):
+model_predictors = []
+
+for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
     best_model = best_model_info[1]  
-
+    model_predictors.append(best_model_info[2])
     best_models.append(best_model)
 
-x = range(len(best_models))
-plt.plot(x, best_models)
-plt.savefig('fitness.png')
+save_png(best_models)
+
+for index, model in enumerate(model_predictors) : 
+    columns_to_keep = [df.columns[i] for i, keep in enumerate(model) if keep == 1]
+
+    print("Generation:", index, "\n", "Predictors:", columns_to_keep)
