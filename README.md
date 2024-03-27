@@ -67,4 +67,7 @@ Current GA_feature_selection.py workflow
 Current project plan 
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/mGPS_GA_workflow.drawio.png?raw=true)
 
+I ran a 200 generation long GA. The GA is seemingly still optimizing the solution, i will next try the full file for 500 generations:
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/200_gen_tests/Min%20CP:%200.3,%20Max%20CP:%200.9,%20Mut.%20Prob.%200.05,%20No.%20Offspring:%20100,%20Init%20pop%20size:%20100,%20Reproductive%20Units:%202,%20Generations:%20200,%20Crossover%20points:%203.png?raw=true)
 
+All data for 500 generations: 
