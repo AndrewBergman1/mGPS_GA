@@ -191,9 +191,9 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-abundance_df, meta_df = load_data_file(metadata_file="/home/andrewbergman/courses/mGPS_GA/complete_metadata.csv", abundance_file="/home/andrewbergman/courses/mGPS_GA/metasub_taxa_abundance.csv")
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./metasub_taxa_abundance.csv")
 df = import_coordinates(abundance_df, meta_df)
-df.to_csv('df.csv', index=False)
+#df.to_csv('df.csv', index=False)
 
 crossover_min = float(sys.argv[1])
 crossover_max = float(sys.argv[2])
