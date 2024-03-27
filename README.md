@@ -34,7 +34,7 @@ GA_feature_selection.py was ran with the following conditions (python3 GA_featur
 	- Generations: 50 
 
 The following result was acquired: 
-![The figure illustrates the lowest AIC values acquired for each generation, running GA_feature_selection.py.](image_url)
+![The figure illustrates the lowest AIC values acquired for each generation, running GA_feature_selection.py.](https://github.com/AndrewBergman1/mGPS_GA/blob/main/fitness.png)
 
 
 ### Immediate actions to take: 
@@ -45,4 +45,25 @@ The following result was acquired:
 
 2) Figure out what the implications are of negative AIC values. 
 
-3) Read the paper Eran sent to me. 
+3) Read the paper Eran sent to me.
+
+## 27/3 2024
+Today's agenda: 
+- Read Eran's paper
+- Meet with Eran to discuss project
+- Think about how to improve the stochastic components of the GA: mutations, crossovers
+- Implement a solution for the crossover() function
+  
+### Eran's Paper Take-aways
+- Evaluate the GA by counting: True positives, True negatives, False negatives and False positives.
+
+### Implementing N-point crossover for the crossover() function
+There are three conventional ways of crossing over: one-point crossover, N-point crossover and uniform crossover. I will do a N-point crossover where the user can dictate the number of crossover points. This means that crossovers are randomly generated, sorted, then the parental chromosomes are alternately taken from one and the other at those crossover points. 
+
+### Optimizations 
+Thought: If no offspring has a lower AIC than any of the parents, the parent(s) with lower AIC enter the offspring population (parents compete with their offspring).
+**Mutation rate**
+
+**min- and max crossover points**
+
+
