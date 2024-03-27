@@ -1,6 +1,6 @@
 # Genetic algorithm for feature selection in metasub dataset.
 
-# python3 GA_feature_selection.py 0.3 0.9 0.2 50 50 4 50
+# python3 GA_feature_selection.py 0.3 0.9 0.2 50 50 4 50 3
     # min crossover point: 0.3
     # max crossover point: 0.9
     # mutation chance: 20%
@@ -8,6 +8,7 @@
     # initial population: 50 
     # reproductive units: 4 
     # Generations: 50 
+    # Number of crossovers: 3
 
 
 # Create a starting population of 10 individuals with either 1 or 0, 
@@ -104,7 +105,7 @@ def select_parents(sorted_models, reproductive_units) :
 # Option 1: Best parent gets to mate with random other parent.
 # Option 2: All parents above the threshold mate randomly to produce the offspring.
 # Option 3: The best mates with many, the second best mates with a few, the third best mates with fewer... etc ...
-def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units) :
+def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units, no_crossovers) :
     selected_parents = [parent[2] for index, parent in enumerate(parents) if index <= reproductive_units]
 
     while True:
@@ -118,12 +119,34 @@ def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_
 
     offspring_population = []
 
-    # Create 50 offspring 
-    for offspring_number in range(no_offspring) :
-        crossover_point = int(rd.uniform(crossover_min, crossover_max)*len(p1))
-        offspring = p1[0:crossover_point] + p2[crossover_point:]
+    for _ in range(no_offspring):
+        # Ensure crossover points are unique and sorted
+        crossover_points = sorted(set([int(rd.uniform(crossover_min, crossover_max) * len(p1)) for i in range(no_crossovers)]))
+        
+        offspring = []
+        last_point = 0
+        # Alternate between segments from p1 and p2
+        for i, point in enumerate(crossover_points):
+            if i % 2 == 0:
+                offspring += p1[last_point:point]
+            else:
+                offspring += p2[last_point:point]
+            last_point = point
+        # Add the remaining segment from the appropriate parent
+        if len(crossover_points) % 2 == 0:
+            offspring += p2[last_point:]
+        else:
+            offspring += p1[last_point:]
+
         offspring_population.append(offspring)
+    # Create 50 offspring 
+   # for offspring_number in range(no_offspring) :
+   #     crossover_point = int(rd.uniform(crossover_min, crossover_max)*len(p1))
+    #    offspring = p1[0:crossover_point] + p2[crossover_point:]
+    #    offspring_population.append(offspring)
     
+    #print(offspring_population)
+    #sys.exit()
     return offspring_population
 
 def mutate_offspring(offspring_population, mutation_rate):
@@ -144,7 +167,7 @@ def run_GA(population, predictors, response_variables) :
     # Selects the best suited parents (2, can be changed later)
     parents = select_parents(sorted_models, reproductive_units)
 
-    offspring_population = crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units)
+    offspring_population = crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units, no_crossovers)
 
     # mutates each offspring (p = 0.01 for each gene)
     population = mutate_offspring(offspring_population, mutation_rate)
@@ -152,14 +175,23 @@ def run_GA(population, predictors, response_variables) :
     return population, sorted_models[0]
 
 def save_png(best_models):
+    title = "Min CP: " + str(sys.argv[1]) + ", " + \
+            "Max CP: " + str(sys.argv[2]) + ", " + \
+            "Mut. Prob. " + str(sys.argv[3]) + ", " + \
+            "No. Offspring: " + str(sys.argv[4]) + ", " + \
+            "Init pop size: " + str(sys.argv[5]) + ", " + \
+            "Reproductive Units: " + str(sys.argv[6]) + ", " + \
+            "Generations: " + str(sys.argv[7]) + ", " + \
+            "Crossover points: " + str(sys.argv[8])
     plt.figure(figsize=(19.2, 10.2))
     x = range(len(best_models))
     plt.plot(x, best_models, marker='o')  # Plot the points with a marker
     # Annotate each point with its y-value
     for i, value in enumerate(best_models):
         plt.text(x[i], value, f"{value:.2f}", horizontalalignment='left', verticalalignment='bottom', fontsize=9)  
-    plt.title("Min CP: " + str(sys.argv[1]) + ", " + " Max  CP: " + str(sys.argv[2]) + ", " + " Mut. Prob. " + str(sys.argv[3]) + ", " + " No. Offspring: " + str(sys.argv[4]) + ", " + " Init pop size: " + str(sys.argv[5]) + ", " + " Reproductive Units: " + str(sys.argv[6]) + ", " + " Generations: " + str(sys.argv[7]))
-    plt.savefig('fitness.png')  # Save the figure after all annotations
+    plt.title(title)
+    # Save the figure with the timestamped filename
+    plt.savefig(f'{title}.png')
     
 
 #abundance_df, meta_df = load_data_file(metadata_file="/home/andrewbergman/courses/mGPS_GA/complete_metadata.csv", abundance_file="/home/andrewbergman/courses/mGPS_GA/metasub_taxa_abundance.csv")
@@ -173,6 +205,7 @@ no_offspring = int(sys.argv[4])
 init_pop_size = int(sys.argv[5])
 reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
+no_crossovers = int(sys.argv[8])
 
 df = pd.read_csv('/home/andrewbergman/courses/mGPS_GA/first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
@@ -193,4 +226,4 @@ save_png(best_models)
 for index, model in enumerate(model_predictors) : 
     columns_to_keep = [df.columns[i] for i, keep in enumerate(model) if keep == 1]
 
-    print("Generation:", index, "\n", "Predictors:", columns_to_keep)
+    #print("Generation:", index, "\n", "Predictors:", columns_to_keep)
