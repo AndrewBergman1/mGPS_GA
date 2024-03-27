@@ -49,10 +49,11 @@ The following result was acquired:
 
 ## 27/3 2024
 Today's agenda: 
-- Read Eran's paper
-- Meet with Eran to discuss project
-- Think about how to improve the stochastic components of the GA: mutations, crossovers
-- Implement a solution for the crossover() function
+- Read Eran's paper - COMPLETE
+- Meet with Eran to discuss project - COMPLETE
+- Think about how to improve the stochastic components of the GA: mutations, crossovers - COMPLETE
+- Implement a solution for the crossover() function - COMPLETE
+- Try to implement CPU paralelization in the program.
   
 ### Eran's Paper Take-aways
 - Evaluate the GA by counting: True positives, True negatives, False negatives and False positives.
@@ -60,5 +61,10 @@ Today's agenda:
 ### Implementing N-point crossover for the crossover() function
 There are three conventional ways of crossing over: one-point crossover, N-point crossover and uniform crossover. I will do a N-point crossover where the user can dictate the number of crossover points. This means that crossovers are randomly generated, sorted, then the parental chromosomes are alternately taken from one and the other at those crossover points. 
 
+Current GA_feature_selection.py workflow
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/GA_feature_selection.py.drawio.png?raw=true)
+
+Current project plan 
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/mGPS_GA_workflow.drawio.png?raw=true)
+
+
