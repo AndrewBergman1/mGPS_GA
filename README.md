@@ -60,5 +60,5 @@ Today's agenda:
 ### Implementing N-point crossover for the crossover() function
 There are three conventional ways of crossing over: one-point crossover, N-point crossover and uniform crossover. I will do a N-point crossover where the user can dictate the number of crossover points. This means that crossovers are randomly generated, sorted, then the parental chromosomes are alternately taken from one and the other at those crossover points. 
 
-
-
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/GA_feature_selection.py.drawio.png?raw=true)
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/mGPS_GA_workflow.drawio.png?raw=true)
