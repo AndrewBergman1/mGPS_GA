@@ -60,10 +60,5 @@ Today's agenda:
 ### Implementing N-point crossover for the crossover() function
 There are three conventional ways of crossing over: one-point crossover, N-point crossover and uniform crossover. I will do a N-point crossover where the user can dictate the number of crossover points. This means that crossovers are randomly generated, sorted, then the parental chromosomes are alternately taken from one and the other at those crossover points. 
 
-### Optimizations 
-Thought: If no offspring has a lower AIC than any of the parents, the parent(s) with lower AIC enter the offspring population (parents compete with their offspring).
-**Mutation rate**
-
-**min- and max crossover points**
 
 
