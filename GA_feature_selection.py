@@ -191,9 +191,9 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-#abundance_df, meta_df = load_data_file(metadata_file="/home/andrewbergman/courses/mGPS_GA/complete_metadata.csv", abundance_file="/home/andrewbergman/courses/mGPS_GA/metasub_taxa_abundance.csv")
-#df = import_coordinates(abundance_df, meta_df)
-#df.to_csv('df.csv', index=False)
+abundance_df, meta_df = load_data_file(metadata_file="/home/andrewbergman/courses/mGPS_GA/complete_metadata.csv", abundance_file="/home/andrewbergman/courses/mGPS_GA/metasub_taxa_abundance.csv")
+df = import_coordinates(abundance_df, meta_df)
+df.to_csv('df.csv', index=False)
 
 crossover_min = float(sys.argv[1])
 crossover_max = float(sys.argv[2])
@@ -204,7 +204,7 @@ reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
-df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
+#df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
 population =initialize_population(predictors, init_pop_size)
