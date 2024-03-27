@@ -45,4 +45,23 @@ The following result was acquired:
 
 2) Figure out what the implications are of negative AIC values. 
 
-3) Read the paper Eran sent to me. 
+3) Read the paper Eran sent to me.
+
+## 27/3 2024
+Today's agenda: 
+- Read Eran's paper
+- Meet with Eran to discuss project
+- Think about how to improve the stochastic components of the GA: mutations, crossovers
+- Implement a solution for the crossover() function
+  
+### Eran's Paper Take-aways
+- Evaluate the GA by counting: True positives, True negatives, False negatives and False positives.
+
+### Implementing N-point crossover for the crossover() function
+There are three conventional ways of crossing over: one-point crossover, N-point crossover and uniform crossover. I will do a N-point crossover where the user can dictate the number of crossover points. This means that crossovers are randomly generated, sorted, then the parental chromosomes are alternately taken from one and the other at those crossover points. 
+
+### Optimizing mutation rate
+
+### Optimizing min- and max crossover points
+
+
