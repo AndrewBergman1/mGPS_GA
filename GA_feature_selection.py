@@ -19,6 +19,9 @@ import random as rd
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import sys 
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+#from concurrent.futures import ProcessPoolExecutor
 
 #Sets the seed
 rd.seed(42)
@@ -65,27 +68,27 @@ def initialize_population(predictors, init_pop_size) :
         population.append(individual)
     return population
 
-def evaluate_fitness(population, predictors, response_variables) :
-    # Loop through the individuals in the population
+def evaluate_individual_fitness(individual_index, individual, predictors, response_variables):
+    selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
+    model = sm.OLS(response_variables.iloc[:, 0], selected_predictor_data).fit()
+    return [individual_index, model.aic, individual]
+
+def evaluate_fitness(population, predictors, response_variables):
     models = []
-    for index, individual in enumerate(population) :
-        # Include the predictors where the individual's char = 1 
-        selected_predictors = [index for index, char in enumerate(individual) if char == 1] #Contains indices of the predictors to be included in the model.
+    
+    # Use ProcessPoolExecutor to parallelize the evaluation
+    with ProcessPoolExecutor() as executor:
+        # Prepare tasks
+        tasks = [executor.submit(evaluate_individual_fitness, index, individual, predictors, response_variables) 
+                 for index, individual in enumerate(population)]
         
-        # These are the corresponding predictors 
-        selected_predictors = [index for index, predictor in enumerate(predictors) if index in selected_predictors]
-        #selected_predictors_names = [predictors.columns[index] for index in selected_predictors]
-        selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
-
-        # Retrieve the correspodning data to a data frame
-        #print(selected_predictors)
-        # Fit a model to the predictor variables and the latitude! 
-        model = sm.OLS(response_variables.iloc[:, 0], selected_predictor_data).fit()
-        #model2 = sm.OLS(response_variables.iloc[:, 1], selected_predictors).fit()
-
-        # Model number, AIC value and the genetic composition of that individual
-        model = [index, model.aic, individual]
-        models.append(model)
+        # Wait for all tasks to complete and collect results
+        for future in tasks:
+            models.append(future.result())
+    
+    # Sort models based on their AIC value if needed
+    models.sort(key=lambda x: x[1])
+    
     return models
 
 def rank_population(models) : 
@@ -119,7 +122,7 @@ def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_
 
     offspring_population = []
 
-    for _ in range(no_offspring):
+    for i in range(no_offspring):
         # Ensure crossover points are unique and sorted
         crossover_points = sorted(set([int(rd.uniform(crossover_min, crossover_max) * len(p1)) for i in range(no_crossovers)]))
         
@@ -139,14 +142,8 @@ def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_
             offspring += p1[last_point:]
 
         offspring_population.append(offspring)
-    # Create 50 offspring 
-   # for offspring_number in range(no_offspring) :
-   #     crossover_point = int(rd.uniform(crossover_min, crossover_max)*len(p1))
-    #    offspring = p1[0:crossover_point] + p2[crossover_point:]
-    #    offspring_population.append(offspring)
-    
-    #print(offspring_population)
-    #sys.exit()
+
+
     return offspring_population
 
 def mutate_offspring(offspring_population, mutation_rate):
@@ -207,7 +204,7 @@ reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
-df = pd.read_csv('/home/andrewbergman/courses/mGPS_GA/first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
+df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
 population =initialize_population(predictors, init_pop_size)
