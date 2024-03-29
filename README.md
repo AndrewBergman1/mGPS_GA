@@ -77,3 +77,8 @@ I ran GA_feature_selection.py for 500 generations with all data. The program has
 All data for 500 generations: 
 The data is 3600 column x 4000 rows. On average, each individual has 2000 predictors in the multiple linear regression. This means that there are 8,000,000,000 calculations per individual per generation. As there are 100 individuals for 500 generations, this means 3,200,000,000,000,000 calculations (three quadrillion 200 trillion calculations).
 
+
+## 29/3 2024
+The 500 generation test failed. I got the following error message: posx and posy should be finite values, leading to a failure to plot the graph. 
+
+I'll re-run 50 generations using the full data to see how it stacks up against the 50 generations ran using 100 observations.
