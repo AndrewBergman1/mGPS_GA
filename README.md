@@ -85,4 +85,8 @@ I'll re-run 50 generations using the full data to see how it stacks up against t
 
 The 50 generation run has the same plotting issue. 
 
-I have now ran some short GAs on the full data [FAILED], the first 1000 entries [FAILED], the first 100 entries [SUCCESS]. I will now try the first 500 entries [SUCCESS]. Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it. If the issue is the latter, then i think i have to apply some regularization of the data to remove collienarity. The collinearity might lead to strange values on the coefficients, which in turn leads to a failure to retrieve the AIC values.
+I have now ran some short GAs on the full data [FAILED], the first 1000 entries [FAILED], the first 100 entries [SUCCESS]. I will now try the first 500 entries [SUCCESS]. First 750 failed due to 'city longitude' and 'city latitude' not being present. 
+
+Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it. If the issue is the latter, then i think i have to apply some regularization of the data to remove collienarity. The collinearity might lead to strange values on the coefficients, which in turn leads to a failure to retrieve the AIC values. I should also try to reduce the number of possible predictor variables (just using a subset of them).
+	- The fact that first_750 fails suggests that there might be data missing from the meta-data file. I should add a filter, so that if the corr. long and lat are unavailable, the observation is removed!!!
+	
