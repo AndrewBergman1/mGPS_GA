@@ -217,10 +217,11 @@ for i in range(no_generations):
     best_model = best_model_info[1]  
     model_predictors.append(best_model_info[2])
     best_models.append(best_model)
+    print("Generation:", i)
 
 save_png(best_models)
 
 for index, model in enumerate(model_predictors) : 
     columns_to_keep = [df.columns[i] for i, keep in enumerate(model) if keep == 1]
 
-    #print("Generation:", index, "\n", "Predictors:", columns_to_keep)
+    print("Generation:", index, "\n", "Predictors:", columns_to_keep)
