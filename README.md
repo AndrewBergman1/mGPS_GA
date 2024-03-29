@@ -70,4 +70,10 @@ Current project plan
 I ran a 200 generation long GA. The GA is seemingly still optimizing the solution, i will next try the full file for 500 generations:
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/200_gen_tests/Min%20CP:%200.3,%20Max%20CP:%200.9,%20Mut.%20Prob.%200.05,%20No.%20Offspring:%20100,%20Init%20pop%20size:%20100,%20Reproductive%20Units:%202,%20Generations:%20200,%20Crossover%20points:%203.png?raw=true)
 
+## 28/3 2024
+I ran GA_feature_selection.py for 500 generations with all data. The program has been running for 22 hours on the university server. Observing 'TIME+', it looks like most cores have only been active for a couple of minutes. This means that the majority of computations are still single-threaded. A reasonable fix for the future is further parallellization of the program. Surely, all steps can be further effectivized. 
+	- Paralelize the recombination step
+	- See if other parts of the code can be paralelised.
 All data for 500 generations: 
+The data is 3600 column x 4000 rows. On average, each individual has 2000 predictors in the multiple linear regression. This means that there are 8,000,000,000 calculations per individual per generation. As there are 100 individuals for 500 generations, this means 3,200,000,000,000,000 calculations (three quadrillion 200 trillion calculations).
+
