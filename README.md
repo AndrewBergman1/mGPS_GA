@@ -85,4 +85,4 @@ I'll re-run 50 generations using the full data to see how it stacks up against t
 
 The 50 generation run has the same plotting issue. 
 
-I have now ran some short GAs on the full data [FAILED], the first 1000 entries [FAILED], the first 100 entries [SUCCESS]. I will now try the first 500 entries. Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it.
+I have now ran some short GAs on the full data [FAILED], the first 1000 entries [FAILED], the first 100 entries [SUCCESS]. I will now try the first 500 entries [SUCCESS] and the first 1000 entries. Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it.
