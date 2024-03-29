@@ -84,3 +84,5 @@ The 500 generation test failed. I got the following error message: posx and posy
 I'll re-run 50 generations using the full data to see how it stacks up against the 50 generations ran using 100 observations.
 
 The 50 generation run has the same plotting issue. 
+
+I have now ran some short GAs on the full data [FAILED], the first 1000 entries [FAILED], the first 100 entries [SUCCESS]. I will now try the first 500 entries. Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it.
