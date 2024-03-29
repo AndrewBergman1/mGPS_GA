@@ -82,3 +82,5 @@ The data is 3600 column x 4000 rows. On average, each individual has 2000 predic
 The 500 generation test failed. I got the following error message: posx and posy should be finite values, leading to a failure to plot the graph. 
 
 I'll re-run 50 generations using the full data to see how it stacks up against the 50 generations ran using 100 observations.
+
+The 50 generation run has the same plotting issue. 
