@@ -20,6 +20,11 @@ import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import sys 
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import numpy as np
+import seaborn as sns
+import dask.dataframe as dd
+from multiprocessing import cpu_count
 
 #from concurrent.futures import ProcessPoolExecutor
 
@@ -50,6 +55,22 @@ def extract_response_variables(df) :
     df['city_latitude'] = pd.to_numeric(df['city_latitude'], errors='coerce')
 
     return df[columns]
+
+def generate_correlation_matrix_dask(df):
+    # Automatically set the number of partitions to match the number of CPU cores
+    num_cores = cpu_count()
+    ddf = dd.from_pandas(df.select_dtypes(include=[np.number]), npartitions=num_cores)
+    
+    # Compute correlation matrix
+    correlation_matrix = ddf.corr().compute()
+    return correlation_matrix
+
+def print_correlation_heatmap(correlation_matrix) : 
+    # Create a heatmap
+    plt.figure(figsize=(10, 8))  # Adjust the figure size as needed
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+    plt.savefig("correlation_matrix")
+
 
 def initialize_population(predictors, init_pop_size) :
     td = 0.5
@@ -157,17 +178,28 @@ def mutate_offspring(offspring_population, mutation_rate):
 
 def run_GA(population, predictors, response_variables) :        
     models = evaluate_fitness(population, predictors, response_variables)
+
+    print("Models", models)
+
     # Sorts based on AIC (2nd element in list)
     sorted_models = rank_population(models)
+
+    #print("Sorted Models", sorted_models)
 
     #print(sorted_models)
     # Selects the best suited parents (2, can be changed later)
     parents = select_parents(sorted_models, reproductive_units)
 
+    #print("Parents:", parents)
+
     offspring_population = crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units, no_crossovers)
+
+    #print("offspring population", offspring_population)
 
     # mutates each offspring (p = 0.01 for each gene)
     population = mutate_offspring(offspring_population, mutation_rate)
+
+    #print("mutated offspring population", population)
 
     return population, sorted_models[0]
 
@@ -204,13 +236,18 @@ reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
-#df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
+# Lets have a look at the predictor variables' correlation
+corr_mtx = generate_correlation_matrix_dask(df)
+print_correlation_heatmap(corr_mtx)
+
+sys.exit()
+
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
 population =initialize_population(predictors, init_pop_size)
-
 best_models  = []
 model_predictors = []
+
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
@@ -218,6 +255,7 @@ for i in range(no_generations):
     model_predictors.append(best_model_info[2])
     best_models.append(best_model)
     print("Generation:", i)
+    print(best_models)
 
 save_png(best_models)
 
