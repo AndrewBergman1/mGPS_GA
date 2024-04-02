@@ -90,3 +90,16 @@ I have now ran some short GAs on the full data [FAILED], the first 1000 entries 
 Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it. If the issue is the latter, then i think i have to apply some regularization of the data to remove collienarity. The collinearity might lead to strange values on the coefficients, which in turn leads to a failure to retrieve the AIC values. I should also try to reduce the number of possible predictor variables (just using a subset of them).
 	- The fact that first_750 fails suggests that there might be data missing from the meta-data file. I should add a filter, so that if the corr. long and lat are unavailable, the observation is removed!!!
 	
+
+## 2/4 2024
+The situation is as follows: 
+	1. When providing 500 observations, the GA runs properly. 
+	2. When providing 750 observations, the multiple linear regression is poorly fitted, leading to AIC = nan. 
+
+
+Today's worK:
+	1. I initially tried calculating VIF for each evualuation of fitness, this proved to be computationally intensive.
+	2. I then decided to calculate VIF for all predictor variables before running the GA_feature_selection.py. The VIF calculations didnt work out because some predictor variables seem to be fully correlated. This leads to division by 0 (VIF=1/(1-R^2)). 
+	3. I then decided to generate a correlation heatmap to visualise the correlation between different microorganisms. 
+	4. I will decide on a correlation threshold at which i'll discard predictor variables.
+	5. Calculate VIFs and handle VIFs where division by 0 occurs (catch R2=0).
