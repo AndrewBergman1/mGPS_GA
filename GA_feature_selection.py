@@ -75,6 +75,8 @@ def calculate_vif(predictors_df):
     vif_data = pd.DataFrame()
     vif_data["Feature"] = features
     vif_data["VIF"] = vifs
+    vif_df.to_csv("vif_df.csv", index=False)
+
     return vif_data
 
 def extract_response_variables(df) : 
@@ -235,7 +237,7 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./first_750")
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./")
 df = import_coordinates(abundance_df, meta_df)
 #df.to_csv('df.csv', index=False)
 
@@ -249,10 +251,8 @@ no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
 #print(df)
-
+### Currently im investigating how to get the project to run. The multicollinearity seems to be significant, as the vif is infinite for many predictor variables.
 vif_df = calculate_vif(df)
-
-print(vif_df)
 sys.exit()
 
 #df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
