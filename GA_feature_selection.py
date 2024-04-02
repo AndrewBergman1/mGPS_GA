@@ -20,11 +20,10 @@ import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import sys 
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
+
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import numpy as np
-import seaborn as sns
-import dask.dataframe as dd
-from multiprocessing import cpu_count
 
 #from concurrent.futures import ProcessPoolExecutor
 
@@ -49,28 +48,41 @@ def extract_predictors(df) :
 
     return df
 
+
+def calculate_vif_single_feature(data, feature_index):
+    """
+    Calculate the VIF for a single feature.
+    """
+    return variance_inflation_factor(data.values, feature_index)
+
+def calculate_vif(predictors_df):
+    predictors_df.drop(["uuid", "city_longitude", "city_latitude"], axis=1, inplace=True)
+    # Convert all columns to numeric, forcing non-convertible values to NaN
+    predictors_df = predictors_df.apply(pd.to_numeric, errors='coerce')
+    # Drop rows with NaN values to ensure clean VIF calculation
+    predictors_df.dropna(inplace=True)
+    predictors_df = sm.add_constant(predictors_df)
+    features = predictors_df.columns[1:]  # Skip the constant term for feature names
+    
+    # Prepare data for parallel VIF computation
+    data_for_vif = [predictors_df] * len(features)
+    
+    with ThreadPoolExecutor() as executor:
+        # Calculate VIF in parallel
+        vifs = list(executor.map(calculate_vif_single_feature, data_for_vif, range(1, len(features) + 1)))
+    
+    # Combine feature names with their corresponding VIF
+    vif_data = pd.DataFrame()
+    vif_data["Feature"] = features
+    vif_data["VIF"] = vifs
+    return vif_data
+
 def extract_response_variables(df) : 
     columns = [col for col in df.columns if col in ['city_longitude', 'city_latitude']]
     df['city_longitude'] = pd.to_numeric(df['city_longitude'], errors='coerce')
     df['city_latitude'] = pd.to_numeric(df['city_latitude'], errors='coerce')
 
     return df[columns]
-
-def generate_correlation_matrix_dask(df):
-    # Automatically set the number of partitions to match the number of CPU cores
-    num_cores = cpu_count()
-    ddf = dd.from_pandas(df.select_dtypes(include=[np.number]), npartitions=num_cores)
-    
-    # Compute correlation matrix
-    correlation_matrix = ddf.corr().compute()
-    return correlation_matrix
-
-def print_correlation_heatmap(correlation_matrix) : 
-    # Create a heatmap
-    plt.figure(figsize=(10, 8))  # Adjust the figure size as needed
-    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
-    plt.savefig("correlation_matrix")
-
 
 def initialize_population(predictors, init_pop_size) :
     td = 0.5
@@ -236,18 +248,22 @@ reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
-# Lets have a look at the predictor variables' correlation
-corr_mtx = generate_correlation_matrix_dask(df)
-print_correlation_heatmap(corr_mtx)
+#print(df)
 
+vif_df = calculate_vif(df)
+
+print(vif_df)
 sys.exit()
 
+#df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
 population =initialize_population(predictors, init_pop_size)
+#print(df.columns)
+
+
 best_models  = []
 model_predictors = []
-
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
