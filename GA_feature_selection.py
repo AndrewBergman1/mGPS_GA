@@ -237,7 +237,7 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./")
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./first_750")
 df = import_coordinates(abundance_df, meta_df)
 #df.to_csv('df.csv', index=False)
 

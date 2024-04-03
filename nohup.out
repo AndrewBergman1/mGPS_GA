@@ -1,15 +1,2 @@
-Traceback (most recent call last):
-  File "/home/inf-34-2023/GA_feature_selection/GA_feature_selection/GA_feature_selection.py", line 195, in <module>
-    df = import_coordinates(abundance_df, meta_df)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/inf-34-2023/GA_feature_selection/GA_feature_selection/GA_feature_selection.py", line 36, in import_coordinates
-    coordinates = meta_df[['uuid', 'city_longitude', 'city_latitude']] #Retrieve all UUIDs and their corresponding coordinates
-                  ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/inf-34-2023/miniconda3/lib/python3.12/site-packages/pandas/core/frame.py", line 4096, in __getitem__
-    indexer = self.columns._get_indexer_strict(key, "columns")[1]
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/inf-34-2023/miniconda3/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 6200, in _get_indexer_strict
-    self._raise_if_missing(keyarr, indexer, axis_name)
-  File "/home/inf-34-2023/miniconda3/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 6252, in _raise_if_missing
-    raise KeyError(f"{not_found} not in index")
-KeyError: "['city_longitude', 'city_latitude'] not in index"
+/home/inf-34-2023/miniconda3/lib/python3.12/site-packages/statsmodels/stats/outliers_influence.py:198: RuntimeWarning: divide by zero encountered in scalar divide
+  vif = 1. / (1. - r_squared_i)

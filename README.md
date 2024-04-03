@@ -103,3 +103,4 @@ Today's worK:
 	3. I then decided to generate a correlation heatmap to visualise the correlation between different microorganisms. 
 	4. I will decide on a correlation threshold at which i'll discard predictor variables.
 	5. Calculate VIFs and handle VIFs where division by 0 occurs (catch R2=0).
+		- I have generated the VIFs and collected them in a .csv file. The R2=0 still needs to be sorted out...
