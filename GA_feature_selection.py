@@ -30,54 +30,12 @@ import numpy as np
 #Sets the seed
 rd.seed(42)
 
-# Loads the CSV-file as a data frame
-def load_data_file(abundance_file, metadata_file) :
-    abundance_df = pd.read_csv(abundance_file)
-    meta_df = pd.read_csv(metadata_file)
-    return abundance_df, meta_df
-
-def import_coordinates(abundance_df, meta_df) :
-    coordinates = meta_df[['uuid', 'city_longitude', 'city_latitude']] #Retrieve all UUIDs and their corresponding coordinates
-    df = pd.merge(abundance_df, coordinates, on='uuid', how="inner")
-    return df
-
 def extract_predictors(df) :
     columns = [col for col in df.columns if col not in ['city_longitude', 'city_latitude', 'uuid']]
     df = df[columns]
     df = df.apply(pd.to_numeric, errors='coerce')
 
     return df
-
-
-def calculate_vif_single_feature(data, feature_index):
-    """
-    Calculate the VIF for a single feature.
-    """
-    return variance_inflation_factor(data.values, feature_index)
-
-def calculate_vif(predictors_df):
-    predictors_df.drop(["uuid", "city_longitude", "city_latitude"], axis=1, inplace=True)
-    # Convert all columns to numeric, forcing non-convertible values to NaN
-    predictors_df = predictors_df.apply(pd.to_numeric, errors='coerce')
-    # Drop rows with NaN values to ensure clean VIF calculation
-    predictors_df.dropna(inplace=True)
-    predictors_df = sm.add_constant(predictors_df)
-    features = predictors_df.columns[1:]  # Skip the constant term for feature names
-    
-    # Prepare data for parallel VIF computation
-    data_for_vif = [predictors_df] * len(features)
-    
-    with ThreadPoolExecutor() as executor:
-        # Calculate VIF in parallel
-        vifs = list(executor.map(calculate_vif_single_feature, data_for_vif, range(1, len(features) + 1)))
-    
-    # Combine feature names with their corresponding VIF
-    vif_data = pd.DataFrame()
-    vif_data["Feature"] = features
-    vif_data["VIF"] = vifs
-    vif_df.to_csv("vif_df.csv", index=False)
-
-    return vif_data
 
 def extract_response_variables(df) : 
     columns = [col for col in df.columns if col in ['city_longitude', 'city_latitude']]
@@ -237,9 +195,13 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./first_750")
-df = import_coordinates(abundance_df, meta_df)
+#abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./first_750")
+#df = import_coordinates(abundance_df, meta_df)
 #df.to_csv('df.csv', index=False)
+
+######
+# INSERT FUNCTION TO LOAD THE FEATURE SET FROM PREPROCESSING.PY
+
 
 crossover_min = float(sys.argv[1])
 crossover_max = float(sys.argv[2])
