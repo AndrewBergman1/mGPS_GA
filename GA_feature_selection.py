@@ -43,16 +43,16 @@ def import_coordinates(abundance_df, meta_df) :
     return df
 
 def extract_predictors(df) :
-    columns = [col for col in df.columns if col not in ['city_longitude', 'city_latitude', 'uuid']]
+    columns = [col for col in df.columns if col not in ['longitude', 'latitude', 'uuid']]
     df = df[columns]
     df = df.apply(pd.to_numeric, errors='coerce')
 
     return df
 
 def extract_response_variables(df) : 
-    columns = [col for col in df.columns if col in ['city_longitude', 'city_latitude']]
-    df['city_longitude'] = pd.to_numeric(df['city_longitude'], errors='coerce')
-    df['city_latitude'] = pd.to_numeric(df['city_latitude'], errors='coerce')
+    columns = [col for col in df.columns if col in ['longitude', 'latitude']]
+    df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
+    df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
 
     return df[columns]
 
@@ -223,8 +223,8 @@ no_crossovers = int(sys.argv[8])
 
 #print(df)
 ### Currently im investigating how to get the project to run. The multicollinearity seems to be significant, as the vif is infinite for many predictor variables.
-vif_df = calculate_vif(df)
-sys.exit()
+#vif_df = calculate_vif(df)
+#sys.exit()
 
 #df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 predictors = extract_predictors(df)
