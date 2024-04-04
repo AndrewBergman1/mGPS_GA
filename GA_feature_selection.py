@@ -21,7 +21,11 @@ import matplotlib.pyplot as plt
 import sys 
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from concurrent.futures import ThreadPoolExecutor
-
+from sklearn.linear_model import Ridge
+from sklearn.metrics import r2_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import RidgeCV
+from sklearn.model_selection import RepeatedKFold
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import numpy as np
 
@@ -36,10 +40,12 @@ def load_data_file(abundance_file, metadata_file) :
     return abundance_df, meta_df
 
 def import_coordinates(abundance_df, meta_df) :
-    coordinates = meta_df[['uuid', 'longitude', 'latitude']] #Retrieve all UUIDs and their corresponding coordinates
+    coordinates = meta_df[['uuid', 'longitude', 'latitude']].copy()  # Copying the slice to a new DataFrame
+    coordinates['uuid'] = coordinates['uuid'].astype(str)    
     abundance_df['uuid'] = abundance_df['uuid'].astype(str)
     coordinates['uuid'] = coordinates['uuid'].astype(str)
     df = pd.merge(abundance_df, coordinates, on='uuid', how="inner")
+    df = df.dropna()
     return df
 
 def extract_predictors(df) :
@@ -74,30 +80,52 @@ def initialize_population(predictors, init_pop_size) :
     return population
 
 def evaluate_individual_fitness(individual_index, individual, predictors, response_variables):
+    # Select predictors based on the individual's genes
     selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
-    model = sm.OLS(response_variables.iloc[:, 0], selected_predictor_data).fit()
-    return [individual_index, model.aic, individual]
+    
+    # Check if there are any predictors selected; if not, return a penalty score
+    if selected_predictor_data.empty:
+        return [individual_index, -np.inf, individual]  # Use -inf as a penalty for having no predictors
+
+    # Standardizing predictors since it's good practice with Ridge regression
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(selected_predictor_data)
+    
+    # Define a range of alpha values to explore
+    alphas = list(range(1, 11))  # Convert range to list for RidgeCV
+
+    # Define 10-fold cross-validation
+    cv = RepeatedKFold(n_splits=10, n_repeats=1, random_state=1)
+
+   # Initialize RidgeCV with the alpha values and cross-validation strategy
+    model = RidgeCV(alphas=alphas, cv=cv, scoring='neg_mean_squared_error')
+    model.fit(X_scaled, response_variables.iloc[:, 0])
+
+    # After fitting, the best alpha value is used for the model, which is already available in model.alpha_
+    # Calculate R² as the performance metric with the best model
+    r_squared = model.score(X_scaled, response_variables.iloc[:, 0])
+
+    return [individual_index, r_squared, individual, model.alpha_]
 
 def evaluate_fitness(population, predictors, response_variables):
     models = []
     
-    # Use ProcessPoolExecutor to parallelize the evaluation
     with ProcessPoolExecutor() as executor:
         # Prepare tasks
         tasks = [executor.submit(evaluate_individual_fitness, index, individual, predictors, response_variables) 
                  for index, individual in enumerate(population)]
         
         # Wait for all tasks to complete and collect results
-        for future in tasks:
+        for future in as_completed(tasks):  # Use as_completed to gather results as they complete
             models.append(future.result())
     
-    # Sort models based on their AIC value if needed
-    models.sort(key=lambda x: x[1])
+    # Sort models based on their R² value, higher is better
+    models.sort(key=lambda x: x[1], reverse=True)
     
     return models
 
 def rank_population(models) : 
-    sorted_list = sorted(models, key=lambda x: x[1]) # Sorts the list based on the 2nd element (AIC value)
+    sorted_list = sorted(models, key=lambda x: x[1], reverse = True) # Sorts the list based on the 2nd element (AIC value)
 
     return sorted_list
 
@@ -207,8 +235,7 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./Filtered_pred_vif_750")
-df = import_coordinates(abundance_df, meta_df)
+
 #df.to_csv('df.csv', index=False)
 
 
@@ -227,6 +254,8 @@ no_crossovers = int(sys.argv[8])
 #sys.exit()
 
 #df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./Filtered_predictors_on_vif")
+df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
 population =initialize_population(predictors, init_pop_size)
