@@ -30,6 +30,18 @@ import numpy as np
 #Sets the seed
 rd.seed(42)
 
+def load_data_file(abundance_file, metadata_file) :
+    abundance_df = pd.read_csv(abundance_file)
+    meta_df = pd.read_csv(metadata_file)
+    return abundance_df, meta_df
+
+def import_coordinates(abundance_df, meta_df) :
+    coordinates = meta_df[['uuid', 'longitude', 'latitude']] #Retrieve all UUIDs and their corresponding coordinates
+    abundance_df['uuid'] = abundance_df['uuid'].astype(str)
+    coordinates['uuid'] = coordinates['uuid'].astype(str)
+    df = pd.merge(abundance_df, coordinates, on='uuid', how="inner")
+    return df
+
 def extract_predictors(df) :
     columns = [col for col in df.columns if col not in ['city_longitude', 'city_latitude', 'uuid']]
     df = df[columns]
@@ -195,12 +207,9 @@ def save_png(best_models):
     plt.savefig(f'{title}.png')
     
 
-#abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./first_750")
-#df = import_coordinates(abundance_df, meta_df)
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./Filtered_pred_vif_750")
+df = import_coordinates(abundance_df, meta_df)
 #df.to_csv('df.csv', index=False)
-
-######
-# INSERT FUNCTION TO LOAD THE FEATURE SET FROM PREPROCESSING.PY
 
 
 crossover_min = float(sys.argv[1])
