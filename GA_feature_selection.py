@@ -92,7 +92,7 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
     X_scaled = scaler.fit_transform(selected_predictor_data)
     
     # Define a range of alpha values to explore
-    alphas = list(range(1, 11))  # Convert range to list for RidgeCV
+    alphas = list(range(1, 40, 2))  # Convert range to list for RidgeCV
 
     # Define 10-fold cross-validation
     cv = RepeatedKFold(n_splits=10, n_repeats=1, random_state=1)
@@ -254,7 +254,7 @@ no_crossovers = int(sys.argv[8])
 #sys.exit()
 
 #df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./Filtered_predictors_on_vif")
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
 df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
@@ -275,7 +275,21 @@ for i in range(no_generations):
 
 save_png(best_models)
 
-for index, model in enumerate(model_predictors) : 
-    columns_to_keep = [df.columns[i] for i, keep in enumerate(model) if keep == 1]
 
-    print("Generation:", index, "\n", "Predictors:", columns_to_keep)
+best_models = open("best_models.txt", "w")  # It's good practice to include the file extension
+
+for index, model in enumerate(model_predictors):
+    # Convert the list of columns to a comma-separated string
+    columns_to_keep = ', '.join([df.columns[i] for i, keep in enumerate(model) if keep == 1])
+    
+    # Prepare the line to write to the file
+    line = f"Generation: {index}\nPredictors: {columns_to_keep}\n\n"  # Adding a newline for separation between entries
+    
+    # Write the formatted line to the file
+    best_models.write(line)
+    
+    # Print the same information to the console
+    print(f"Generation: {index}\nPredictors: {columns_to_keep}\n")
+
+# It's important to close the file after writing to ensure data is properly saved
+best_models.close()

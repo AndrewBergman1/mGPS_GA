@@ -104,3 +104,10 @@ Today's worK:
 	4. I will decide on a correlation threshold at which i'll discard predictor variables.
 	5. Calculate VIFs and handle VIFs where division by 0 occurs (catch R2=0).
 		- I have generated the VIFs and collected them in a .csv file. The R2=0 still needs to be sorted out...
+
+## 4/4 2024
+I calculated the VIFs using all predictor variables and either received "inf" or nothing for each predictor variable. VIF calculations follow this equation: 1/(1-R^2). A multiple linear regression model is fitted for each predictor variable using the rest of them. In order to gain interpretable VIF values i generated a correlation matrix (pd.corr()). Using it, i removed every predictor variable that had correlations with other variables exceeding 0.7 (absolute value). I then calculated the VIFs again, now yielding interpretable values. When i was calculating VIFs using few observations, the error persisted, when calculating it with the full dataset, values were good. 
+
+After having calculated the VIFs, i filtered away predictor varaibles with VIF > 5, as they would cause overfitting of the model. 
+
+Followingly, I tried to run the GA. However, the AIC values returned from the multiple linear regression were still NaN. I found online that Ridge Regularisation could be used in cases where there are very many variables with relatively few observations (as in this case). Thus, i excchanged the multiple linear regression for ridge regressin. The ridge regression is based on multiple linear regression, but instead of optimising for least sum squared, it optimises for least sum squared AND (the slope)^2 * lambda (penalisation constant). In order to find the appropriate penalisation constant i employed 10-fold cross validation. I permited values from 0-39 (step=2). 
