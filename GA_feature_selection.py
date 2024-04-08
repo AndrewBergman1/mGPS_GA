@@ -21,13 +21,15 @@ import matplotlib.pyplot as plt
 import sys 
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from concurrent.futures import ThreadPoolExecutor
-from sklearn.linear_model import Ridge
 from sklearn.metrics import r2_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import RidgeCV
 from sklearn.model_selection import RepeatedKFold
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.metrics import mean_squared_error
 import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
 
 #from concurrent.futures import ProcessPoolExecutor
 
@@ -82,36 +84,47 @@ def initialize_population(predictors, init_pop_size) :
 def evaluate_individual_fitness(individual_index, individual, predictors, response_variables):
     # Select predictors based on the individual's genes
     selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
-    
-    # Check if there are any predictors selected; if not, return a penalty score
+
+    # Check if any predictors are selected; if not, return a penalty score
     if selected_predictor_data.empty:
-        return [individual_index, -np.inf, individual, None, None]  # Added None for model coefficients and alpha to maintain the return structure
+        return [individual_index, -np.inf, individual, None, None]  # With penalty
 
-    # Standardizing predictors since it's good practice with Ridge regression
+    # Split data into training and test sets (90% train, 10% test)
+    X_train, X_test, y_train, y_test = train_test_split(
+        selected_predictor_data, 
+        response_variables.iloc[:, 0], 
+        test_size=0.1, 
+        random_state=42
+    )
+
+    # Standardize predictors
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(selected_predictor_data)
-    
-    # Set alpha directly for Ridge regression without cross-validation
-    alpha = 40
-    model = Ridge(alpha=alpha)
-    model.fit(X_scaled, response_variables.iloc[:, 0])
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
-    # Input other metric of optimization!!!!!!!!! 
-    # Train the model on 90% of the data, test it on 10%. Rank based on difference in predicted latitude.
+    # Use RidgeCV to find the best alpha during cross-validation on the training set
+    alphas = list(range(950, 1050, 10))  # Example range of alpha
+    model_cv = RidgeCV(alphas=alphas, store_cv_values=True)
+    model_cv.fit(X_train_scaled, y_train)
 
-    # Calculate R² as the performance metric with the model
-    r_squared = model.score(X_scaled, response_variables.iloc[:, 0])
+    # Train the Ridge model on the entire training set using the best alpha found
+    model = Ridge(alpha=model_cv.alpha_)
+    model.fit(X_train_scaled, y_train)
+
+    # Evaluate the model on the test set
+    y_pred = model.predict(X_test_scaled)
+    test_error = mean_squared_error(y_test, y_pred)
 
     # Retrieve the model's coefficients
     coefficients = model.coef_
 
-    # Return the individual's index, R², individual representation, the set alpha, and model coefficients
-    return [individual_index, r_squared, individual, alpha, coefficients]
+    # Return the evaluation results including the test error, best alpha, and model coefficients
+    return [individual_index, test_error, individual, model_cv.alpha_, coefficients]  # Note: Minimizing error, so using -error as fitness
 
 def evaluate_fitness(population, predictors, response_variables):
     models = []
     
-    with ProcessPoolExecutor() as executor:
+    with ProcessPoolExecutor(max_workers=30) as executor:
         # Prepare tasks
         tasks = [executor.submit(evaluate_individual_fitness, index, individual, predictors, response_variables) 
                  for index, individual in enumerate(population)]
@@ -121,100 +134,88 @@ def evaluate_fitness(population, predictors, response_variables):
             models.append(future.result())
     
     # Sort models based on their R² value, higher is better
-    models.sort(key=lambda x: x[1], reverse=True)
     
     return models
 
 def rank_population(models) : 
-    sorted_list = sorted(models, key=lambda x: x[1], reverse = True) # Sorts the list based on the 2nd element (R-squared)
+    sorted_list = sorted(models, key=lambda x: abs(x[1]))
 
     return sorted_list
 
-# Single point crossover
-def select_parents(sorted_models, reproductive_units) :
-    #parents = [sorted_models[0], sorted_models[1]]
-    parents = [model for index, model in enumerate(sorted_models) if index <= reproductive_units]
+def tournament_selection(sorted_models, tournament_size=3):
+    """Select parents using tournament selection."""
+    winners = []
+    for _ in range(2):  # Select two parents
+        # Randomly select indices for participants
+        participant_indices = np.random.randint(len(sorted_models), size=tournament_size)
+        # Fetch the actual participants using indices
+        participants = [sorted_models[index] for index in participant_indices]
+        # Select the best participant based on the fitness value
+        winner = min(participants, key=lambda x: x[1])
+        winners.append(winner)
+    return winners
 
-    return parents 
+def adapt_mutation_rate(initial_rate, generation, total_generations):
+    """Dynamically adjust the mutation rate."""
+    # Decrease mutation rate as the algorithm progresses
+    return initial_rate * (1 - generation / total_generations)
 
-
-# I need to change this to something for reasonable. Currently, you can select the number of parentts that enter a lottery. 
-# Option 1: Best parent gets to mate with random other parent.
-# Option 2: All parents above the threshold mate randomly to produce the offspring.
-# Option 3: The best mates with many, the second best mates with a few, the third best mates with fewer... etc ...
-def crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units, no_crossovers) :
-    selected_parents = [parent[2] for index, parent in enumerate(parents) if index <= reproductive_units]
-
-    while True:
-        p1_choice, p2_choice = rd.sample(range(len(selected_parents)), 2)
-        if p1_choice != p2_choice:
-            break
-
-    p1 = selected_parents[p1_choice]
-    p2 = selected_parents[p2_choice]
-
-
+def crossover(parents, no_offspring, no_crossovers):
+    p1, p2 = parents[0][2], parents[1][2]  # Assuming parents are tuples with the individual at index 2
     offspring_population = []
-
-    for i in range(no_offspring):
-        # Ensure crossover points are unique and sorted
-        crossover_points = sorted(set([int(rd.uniform(crossover_min, crossover_max) * len(p1)) for i in range(no_crossovers)]))
-        
+    for _ in range(no_offspring):
         offspring = []
-        last_point = 0
-        # Alternate between segments from p1 and p2
-        for i, point in enumerate(crossover_points):
+        crossover_points = sorted(np.random.randint(1, len(p1)-1, no_crossovers-1).tolist())
+        crossover_points = [0] + crossover_points + [len(p1)]  # Ensure starting and ending points
+        for i in range(len(crossover_points)-1):
             if i % 2 == 0:
-                offspring += p1[last_point:point]
+                offspring.extend(p1[crossover_points[i]:crossover_points[i+1]])
             else:
-                offspring += p2[last_point:point]
-            last_point = point
-        # Add the remaining segment from the appropriate parent
-        if len(crossover_points) % 2 == 0:
-            offspring += p2[last_point:]
-        else:
-            offspring += p1[last_point:]
-
+                offspring.extend(p2[crossover_points[i]:crossover_points[i+1]])
         offspring_population.append(offspring)
-
-
     return offspring_population
 
 def mutate_offspring(offspring_population, mutation_rate):
     for offspring in offspring_population:
         for i in range(len(offspring)):
-            mutation_coef = rd.random()
-            if mutation_coef < mutation_rate:
-                # Directly mutate the gene in the offspring list
+            if np.random.rand() < mutation_rate:
                 offspring[i] = 0 if offspring[i] == 1 else 1
-    return offspring_population  # Ensure this line is present to return the modified population
+    return offspring_population
 
-def run_GA(population, predictors, response_variables) :        
-    models = evaluate_fitness(population, predictors, response_variables)
+def run_GA(population, predictors, response_variables) : 
+    best_models = []
+    no_improvement_count = 0
+    best_score = np.inf  # Adjust based on whether you're maximizing or minimizing
+    early_stopping_generations = 10 # Stop if no improvements after 10 gens
+    for generation in range(no_generations):
+        models = evaluate_fitness(population, predictors, response_variables)
+        sorted_models = rank_population(models)
+        
+        if sorted_models[0][1] < best_score:
+            best_score = sorted_models[0][1]
+            no_improvement_count = 0
+        else:
+            no_improvement_count += 1
+        
+        if no_improvement_count >= early_stopping_generations:
+            print("Early stopping...")
+            break
 
-    print("Models", models)
+        dynamic_mutation_rate = adapt_mutation_rate(mutation_rate, generation, no_generations)
+        parents = tournament_selection(sorted_models)
+        offspring_population = crossover(parents, no_offspring, no_crossovers)
+        population = mutate_offspring(offspring_population, dynamic_mutation_rate)
+        
+        # Elitism: directly passing the best individual(s) to the next generation
+        elitism_count = 1  # Number of individuals to pass directly
+        population[:elitism_count] = [model[2] for model in sorted_models[:elitism_count]]
 
-    # Sorts based on AIC (2nd element in list)
-    sorted_models = rank_population(models)
+        print(sorted_models)
 
-    #print("Sorted Models", sorted_models)
+        best_models.append(sorted_models[0])  # Keep track of the best model each generation
 
-    #print(sorted_models)
-    # Selects the best suited parents (2, can be changed later)
-    parents = select_parents(sorted_models, reproductive_units)
 
-    #print("Parents:", parents)
-
-    offspring_population = crossover(parents, crossover_min, crossover_max, no_offspring, reproductive_units, no_crossovers)
-
-    #print("offspring population", offspring_population)
-
-    # mutates each offspring (p = 0.01 for each gene)
-    population = mutate_offspring(offspring_population, mutation_rate)
-
-    #print("mutated offspring population", population)
-
-    return population, sorted_models[0]
+    return population, best_models[0]
 
 def save_png(best_models):
     title = "GA Feature Selection Performance"
@@ -254,7 +255,7 @@ no_crossovers = int(sys.argv[8])
 #sys.exit()
 
 #df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
-abundance_df, meta_df = load_data_file(metadata_file="../complete_metadata.csv", abundance_file="../training_data")
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
 df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
@@ -267,6 +268,8 @@ model_predictors = []
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
+    print(best_model_info)
+    #sys.exit()
     best_model = [best_model_info[1]]
     best_model.append(best_model_info[2])
     best_model.append(best_model_info[3])
@@ -298,6 +301,6 @@ with open("best_models.txt", "w") as file:
         # Write to file
         file.write(data_line)
         # Also print the data line to console
-        print(data_line)
+        #print(data_line)
 
 # It's important to close the file after writing to ensure data is properly saved
