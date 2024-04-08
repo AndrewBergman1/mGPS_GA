@@ -210,7 +210,7 @@ def run_GA(population, predictors, response_variables) :
         elitism_count = 1  # Number of individuals to pass directly
         population[:elitism_count] = [model[2] for model in sorted_models[:elitism_count]]
 
-        print(sorted_models)
+        #print(sorted_models)
 
         best_models.append(sorted_models[0])  # Keep track of the best model each generation
 
@@ -268,7 +268,7 @@ model_predictors = []
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
-    print(best_model_info)
+    #print(best_model_info)
     #sys.exit()
     best_model = [best_model_info[1]]
     best_model.append(best_model_info[2])
@@ -278,7 +278,7 @@ for i in range(no_generations):
     #model_predictors.append(best_model_info[2])
     best_models.append(best_model)
     print("Generation:", (i + 1))
-    print(best_models)
+    print(best_model)
 
 save_png(best_models)
 
