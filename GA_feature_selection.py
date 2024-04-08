@@ -85,27 +85,28 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
     
     # Check if there are any predictors selected; if not, return a penalty score
     if selected_predictor_data.empty:
-        return [individual_index, -np.inf, individual]  # Use -inf as a penalty for having no predictors
+        return [individual_index, -np.inf, individual, None, None]  # Added None for model coefficients and alpha to maintain the return structure
 
     # Standardizing predictors since it's good practice with Ridge regression
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(selected_predictor_data)
     
-    # Define a range of alpha values to explore
-    alphas = list(range(1, 40, 2))  # Convert range to list for RidgeCV
-
-    # Define 10-fold cross-validation
-    cv = RepeatedKFold(n_splits=10, n_repeats=1, random_state=1)
-
-   # Initialize RidgeCV with the alpha values and cross-validation strategy
-    model = RidgeCV(alphas=alphas, cv=cv, scoring='neg_mean_squared_error')
+    # Set alpha directly for Ridge regression without cross-validation
+    alpha = 40
+    model = Ridge(alpha=alpha)
     model.fit(X_scaled, response_variables.iloc[:, 0])
 
-    # After fitting, the best alpha value is used for the model, which is already available in model.alpha_
-    # Calculate R² as the performance metric with the best model
+    # Input other metric of optimization!!!!!!!!! 
+    # Train the model on 90% of the data, test it on 10%. Rank based on difference in predicted latitude.
+
+    # Calculate R² as the performance metric with the model
     r_squared = model.score(X_scaled, response_variables.iloc[:, 0])
 
-    return [individual_index, r_squared, individual, model.alpha_]
+    # Retrieve the model's coefficients
+    coefficients = model.coef_
+
+    # Return the individual's index, R², individual representation, the set alpha, and model coefficients
+    return [individual_index, r_squared, individual, alpha, coefficients]
 
 def evaluate_fitness(population, predictors, response_variables):
     models = []
@@ -125,7 +126,7 @@ def evaluate_fitness(population, predictors, response_variables):
     return models
 
 def rank_population(models) : 
-    sorted_list = sorted(models, key=lambda x: x[1], reverse = True) # Sorts the list based on the 2nd element (AIC value)
+    sorted_list = sorted(models, key=lambda x: x[1], reverse = True) # Sorts the list based on the 2nd element (R-squared)
 
     return sorted_list
 
@@ -216,23 +217,22 @@ def run_GA(population, predictors, response_variables) :
     return population, sorted_models[0]
 
 def save_png(best_models):
-    title = "Min CP: " + str(sys.argv[1]) + ", " + \
-            "Max CP: " + str(sys.argv[2]) + ", " + \
-            "Mut. Prob. " + str(sys.argv[3]) + ", " + \
-            "No. Offspring: " + str(sys.argv[4]) + ", " + \
-            "Init pop size: " + str(sys.argv[5]) + ", " + \
-            "Reproductive Units: " + str(sys.argv[6]) + ", " + \
-            "Generations: " + str(sys.argv[7]) + ", " + \
-            "Crossover points: " + str(sys.argv[8])
+    title = "GA Feature Selection Performance"
     plt.figure(figsize=(19.2, 10.2))
-    x = range(len(best_models))
-    plt.plot(x, best_models, marker='o')  # Plot the points with a marker
-    # Annotate each point with its y-value
-    for i, value in enumerate(best_models):
-        plt.text(x[i], value, f"{value:.2f}", horizontalalignment='left', verticalalignment='bottom', fontsize=9)  
+    # Assuming the first element in each sublist is the R² value you want to plot
+    r_squared_values = [model[0] for model in best_models]  # Extract R² values
+
+    #print(r_squared_values)
+    x = range(len(r_squared_values))
+    plt.plot(x, r_squared_values, marker='o')  # Plot the R² values
+    # Annotate each point with its R² value
+    #for i, value in enumerate(r_squared_values):
+        #plt.text(i, value, f"{value:.2f}", horizontalalignment='left', verticalalignment='bottom', fontsize=9)
     plt.title(title)
-    # Save the figure with the timestamped filename
-    plt.savefig(f'{title}.png')
+    plt.xlabel('Generation')
+    plt.ylabel('R² Value')
+    plt.savefig('GA_Feature_Selection_Performance.png')
+    plt.close()
     
 
 
@@ -254,7 +254,7 @@ no_crossovers = int(sys.argv[8])
 #sys.exit()
 
 #df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
+abundance_df, meta_df = load_data_file(metadata_file="../complete_metadata.csv", abundance_file="../training_data")
 df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
@@ -267,29 +267,37 @@ model_predictors = []
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
-    best_model = best_model_info[1]  
-    model_predictors.append(best_model_info[2])
+    best_model = [best_model_info[1]]
+    best_model.append(best_model_info[2])
+    best_model.append(best_model_info[3])
+    best_model.append(best_model_info[4])
+
+    #model_predictors.append(best_model_info[2])
     best_models.append(best_model)
-    print("Generation:", i)
+    print("Generation:", (i + 1))
     print(best_models)
 
 save_png(best_models)
 
+# Open the file for writing
+with open("best_models.txt", "w") as file:
+    # Iterate over each generation's best model data
+    for gen_index, model_info in enumerate(best_models):
+        r_squared, representation, alpha, coefficients = model_info
+        # Convert representation to a string of column names (assuming representation is a list of selected feature indices)
+        selected_features = ', '.join(df.columns[i] for i, selected in enumerate(representation) if selected)
 
-best_models = open("best_models.txt", "w")  # It's good practice to include the file extension
+        coefficients_list = list(coefficients)  # Convert NumPy array to list
 
-for index, model in enumerate(model_predictors):
-    # Convert the list of columns to a comma-separated string
-    columns_to_keep = ', '.join([df.columns[i] for i, keep in enumerate(model) if keep == 1])
-    
-    # Prepare the line to write to the file
-    line = f"Generation: {index}\nPredictors: {columns_to_keep}\n\n"  # Adding a newline for separation between entries
-    
-    # Write the formatted line to the file
-    best_models.write(line)
-    
-    # Print the same information to the console
-    print(f"Generation: {index}\nPredictors: {columns_to_keep}\n")
+        # Prepare the data line
+        data_line = (f"Generation: {gen_index + 1}\n"
+                     f"R²: {r_squared}\n"
+                     f"Selected Features: {selected_features}\n"
+                     f"Alpha: {alpha}\n"
+                     f"Coefficients: {coefficients_list}\n\n")
+        # Write to file
+        file.write(data_line)
+        # Also print the data line to console
+        print(data_line)
 
 # It's important to close the file after writing to ensure data is properly saved
-best_models.close()

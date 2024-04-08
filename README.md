@@ -111,3 +111,8 @@ I calculated the VIFs using all predictor variables and either received "inf" or
 After having calculated the VIFs, i filtered away predictor varaibles with VIF > 5, as they would cause overfitting of the model. 
 
 Followingly, I tried to run the GA. However, the AIC values returned from the multiple linear regression were still NaN. I found online that Ridge Regularisation could be used in cases where there are very many variables with relatively few observations (as in this case). Thus, i excchanged the multiple linear regression for ridge regressin. The ridge regression is based on multiple linear regression, but instead of optimising for least sum squared, it optimises for least sum squared AND (the slope)^2 * lambda (penalisation constant). In order to find the appropriate penalisation constant i employed 10-fold cross validation. I permited values from 0-39 (step=2). 
+
+## 6/4 2024
+Since i hogged the penthouse server, DAg canceled the GA. I removed the 10-fold cross validation to improve performance and makje the runs quicker. I improved the output to include R2, model parameters and all predictor variables. 
+
+I also made a new script for making model predictions. It's not complete yet, first i need to retrieve the validation data.
