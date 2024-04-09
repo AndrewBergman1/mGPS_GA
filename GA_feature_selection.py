@@ -221,7 +221,7 @@ def save_png(best_models):
     title = "GA Feature Selection Performance"
     plt.figure(figsize=(19.2, 10.2))
     # Assuming the first element in each sublist is the R² value you want to plot
-    r_squared_values = [model[0] for model in best_models]  # Extract R² values
+    r_squared_values = [model[0] for model in best_models]  # Extract MSE 
 
     #print(r_squared_values)
     x = range(len(r_squared_values))
