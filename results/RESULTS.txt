@@ -1,0 +1,7 @@
+
+08042024.png: 
+This result is attained by optimizing for R-squared. The model ended up with R-squared=0.903, however, the model predictions are far from good. In order to make the model better at predictions, I will change the optimization metric from R-squared to MSE between predicted- and actual latitude. 
+
+09042024.png: 
+This is the GA optimization graph for [python3 single_core_test.py 0.3 0.9 0.05 20 20 2 10 3]. The graph looks promising, however, the GA is computationally intense. I will run it over the course of 4 days (100 generations, 100 initial population, 50 offspring population).
+ 

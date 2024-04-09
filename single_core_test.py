@@ -122,22 +122,15 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
     coefficients = model.coef_
 
     # Return the evaluation results including the test error, best alpha, and model coefficients
-    return [individual_index, test_error, individual, model_cv.alpha_, coefficients]  # Note: Minimizing error, so using -error as fitness
+    return [individual_index, test_error, individual, model_cv.alpha_, coefficients]
 
 def evaluate_fitness(population, predictors, response_variables):
     models = []
-    
-    with ProcessPoolExecutor(max_workers=30) as executor:
-        # Prepare tasks
-        tasks = [executor.submit(evaluate_individual_fitness, index, individual, predictors, response_variables) 
-                 for index, individual in enumerate(population)]
-        
-        # Wait for all tasks to complete and collect results
-        for future in as_completed(tasks):  # Use as_completed to gather results as they complete
-            models.append(future.result())
-    
-    # Sort models based on their R² value, higher is better
-    
+
+    # Sequentially evaluate the fitness of each individual
+    for index, individual in enumerate(population):
+        result = evaluate_individual_fitness(index, individual, predictors, response_variables)
+        models.append(result)
     return models
 
 def rank_population(models) : 
