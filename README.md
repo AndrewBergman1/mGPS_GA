@@ -62,10 +62,10 @@ Today's agenda:
 There are three conventional ways of crossing over: one-point crossover, N-point crossover and uniform crossover. I will do a N-point crossover where the user can dictate the number of crossover points. This means that crossovers are randomly generated, sorted, then the parental chromosomes are alternately taken from one and the other at those crossover points. 
 
 Current GA_feature_selection.py workflow
-![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/GA_feature_selection.py.drawio.png?raw=true)
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/flowcharts/GA_feature_selection.py.drawio.png)
 
 Current project plan 
-![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/mGPS_GA_workflow.drawio.png?raw=true)
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/flowcharts/mGPS_GA_workflow.drawio.png)
 
 I ran a 200 generation long GA. The GA is seemingly still optimizing the solution, i will next try the full file for 500 generations:
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/200_gen_tests/Min%20CP:%200.3,%20Max%20CP:%200.9,%20Mut.%20Prob.%200.05,%20No.%20Offspring:%20100,%20Init%20pop%20size:%20100,%20Reproductive%20Units:%202,%20Generations:%20200,%20Crossover%20points:%203.png?raw=true)
@@ -90,7 +90,6 @@ I have now ran some short GAs on the full data [FAILED], the first 1000 entries 
 Either the data gets fucked further down the dataset or the multiple linear regression might not be able to handle the data im throwing at it. If the issue is the latter, then i think i have to apply some regularization of the data to remove collienarity. The collinearity might lead to strange values on the coefficients, which in turn leads to a failure to retrieve the AIC values. I should also try to reduce the number of possible predictor variables (just using a subset of them).
 	- The fact that first_750 fails suggests that there might be data missing from the meta-data file. I should add a filter, so that if the corr. long and lat are unavailable, the observation is removed!!!
 	
-
 ## 2/4 2024
 The situation is as follows: 
 	1. When providing 500 observations, the GA runs properly. 
@@ -120,4 +119,4 @@ I also made a new script for making model predictions. It's not complete yet, fi
 
 ## 15/4 2024
 After a long run (50 generations), the predictive ability of latitude is poor (MSE = 1316). I will remove the early stopping function since it seems to halt the GA too much. 
-
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/150424.png)
