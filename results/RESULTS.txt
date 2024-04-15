@@ -3,5 +3,18 @@
 This result is attained by optimizing for R-squared. The model ended up with R-squared=0.903, however, the model predictions are far from good. In order to make the model better at predictions, I will change the optimization metric from R-squared to MSE between predicted- and actual latitude. 
 
 09042024.png: 
-This is the GA optimization graph for [python3 single_core_test.py 0.3 0.9 0.05 20 20 2 10 3]. The graph looks promising, however, the GA is computationally intense. I will run it over the course of 4 days (100 generations, 100 initial population, 50 offspring population).
+This is the GA optimization graph for [python3 single_core_test.py 0.3 0.9 0.05 20 20 2 10 3]. The run required 193 minutes. The graph looks promising, however, the GA is computationally intense. I will run it over the course of 4 days (100 generations, 100 initial population, 50 offspring population). 
+
+Assuming a linear relationship between the parameters and time requirement, the run would take 25 times as long, resulting in ~80 hours. 
+
+Parameters that may need tuning: 
+- Alpha (Lambda) in ridge regression
+- Initial mutation rate 
+
+The other parameters are better, the bigger they are. 
  
+150424.png: 
+The graph shows the GA performance for 50 generations. The best MSE = 1316, which is not good enough. I will remove the early-stop function as it seems to stop too early, leading to better results not being able to show. 
+
+The following command ran for 40 hours: nohup python3 single_core_test.py 0.3 0.9 0.2 100 100 2 50 3 &
+    - Since i removed early stopping, the subsequent runs will take more time. 

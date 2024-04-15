@@ -117,5 +117,7 @@ Since i hogged the penthouse server, DAg canceled the GA. I removed the 10-fold 
 
 I also made a new script for making model predictions. It's not complete yet, first i need to retrieve the validation data.
 
+
 ## 15/4 2024
-After a long run (50 generations), the predictive ability of latitude is poor (MSE = 1316).
+After a long run (50 generations), the predictive ability of latitude is poor (MSE = 1316). I will remove the early stopping function since it seems to halt the GA too much. 
+

@@ -11,6 +11,9 @@
     # Number of crossovers: 3
 
 
+# python3 single_core_test.py 0.3 0.9 0.05 20 20 2 2 3 TAKES 5 MINUTES PER GENERATION
+
+
 # Create a starting population of 10 individuals with either 1 or 0, 
 # representing the presence of microorganisms in the multiple linear regression to follow.
 

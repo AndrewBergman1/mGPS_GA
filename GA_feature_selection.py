@@ -189,7 +189,7 @@ def run_GA(population, predictors, response_variables) :
     best_models = []
     no_improvement_count = 0
     best_score = np.inf  # Adjust based on whether you're maximizing or minimizing
-    early_stopping_generations = 10 # Stop if no improvements after 10 gens
+    early_stopping_generations = no_generations - float(no_generations*0.1) # Stop if no improvements after 80% of generation. 
     for generation in range(no_generations):
         models = evaluate_fitness(population, predictors, response_variables)
         sorted_models = rank_population(models)
@@ -210,7 +210,7 @@ def run_GA(population, predictors, response_variables) :
         population = mutate_offspring(offspring_population, dynamic_mutation_rate)
         
         # Elitism: directly passing the best individual(s) to the next generation
-        elitism_count = 1  # Number of individuals to pass directly
+        elitism_count = 2  # Number of individuals to pass directly
         population[:elitism_count] = [model[2] for model in sorted_models[:elitism_count]]
 
         #print(sorted_models)
