@@ -13,10 +13,6 @@
 
 # python3 single_core_test.py 0.3 0.9 0.05 20 20 2 2 3 TAKES 5 MINUTES PER GENERATION
 
-
-# Create a starting population of 10 individuals with either 1 or 0, 
-# representing the presence of microorganisms in the multiple linear regression to follow.
-
 import pandas as pd
 import random as rd
 import statsmodels.api as sm
@@ -76,7 +72,7 @@ def initialize_population(predictors, init_pop_size) :
     population = []
 
     for individual_number in range(init_pop_size) : 
-        individual = [] # This holds thebinary representation oforganisms
+        individual = [] # This holds the binary representation oforganisms
 
         for predictor in predictors : 
             random_number = rd.random()
@@ -108,8 +104,8 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # Use RidgeCV to find the best alpha during cross-validation on the training set
-    alphas = list(range(950, 1050, 10))  # Example range of alpha
+    # RidgeCV is used to find a reasonable alpha value. The longer the span, the longer the run. 
+    alphas = list(range(950, 1050, 10))  # Alpha range
     model_cv = RidgeCV(alphas=alphas, store_cv_values=True)
     model_cv.fit(X_train_scaled, y_train)
 
@@ -174,8 +170,8 @@ def crossover(parents, no_offspring, no_crossovers):
         offspring_population.append(offspring)
     return offspring_population
 
-def mutate_offspring(offspring_population, mutation_rate):
-    for offspring in offspring_population:
+def mutate_offspring(offspring_population, mutation_rate): 
+    for offspring in offspring_population[2:]: # Skip the two best individuals.
         for i in range(len(offspring)):
             if np.random.rand() < mutation_rate:
                 offspring[i] = 0 if offspring[i] == 1 else 1
@@ -184,8 +180,8 @@ def mutate_offspring(offspring_population, mutation_rate):
 def run_GA(population, predictors, response_variables) : 
     best_models = []
     no_improvement_count = 0
-    best_score = np.inf  # Adjust based on whether you're maximizing or minimizing
-    early_stopping_generations = 10 # Stop if no improvements after 10 gens
+    best_score = np.inf  
+    early_stopping_generations = float(no_generations*0.9) # Stop if no improvements after 90% of the gens
     for generation in range(no_generations):
         models = evaluate_fitness(population, predictors, response_variables)
         sorted_models = rank_population(models)
@@ -205,13 +201,13 @@ def run_GA(population, predictors, response_variables) :
         offspring_population = crossover(parents, no_offspring, no_crossovers)
         population = mutate_offspring(offspring_population, dynamic_mutation_rate)
         
-        # Elitism: directly passing the best individual(s) to the next generation
-        elitism_count = 1  # Number of individuals to pass directly
+        # Elitism is employed: the two best parents are passed to the offspring generation
+        elitism_count = 2  # Number of individuals to pass directly
         population[:elitism_count] = [model[2] for model in sorted_models[:elitism_count]]
 
         #print(sorted_models)
 
-        best_models.append(sorted_models[0])  # Keep track of the best model each generation
+        best_models.append(sorted_models[0])  # track the best model each generation
 
 
     return population, best_models[0]
@@ -221,15 +217,11 @@ def save_png(best_models):
     tot_time = end_time - start_time
     title = "GA Feature Selection Performance: " + str(tot_time)
     plt.figure(figsize=(19.2, 10.2))
-    # Assuming the first element in each sublist is the R² value you want to plot
-    r_squared_values = [model[0] for model in best_models]  # Extract MSE 
+    mse = [model[0] for model in best_models]  # Extract MSE 
 
-    #print(r_squared_values)
-    x = range(len(r_squared_values))
-    plt.plot(x, r_squared_values, marker='o')  # Plot the R² values
-    # Annotate each point with its R² value
-    #for i, value in enumerate(r_squared_values):
-        #plt.text(i, value, f"{value:.2f}", horizontalalignment='left', verticalalignment='bottom', fontsize=9)
+    #print(mse)
+    x = range(len(mse))
+    plt.plot(x, mse, marker='o')  # Plot MSE values
     plt.title(title)
     plt.xlabel('Generation')
     plt.ylabel('R² Value')
@@ -250,33 +242,21 @@ reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
-#print(df)
-### Currently im investigating how to get the project to run. The multicollinearity seems to be significant, as the vif is infinite for many predictor variables.
-#vif_df = calculate_vif(df)
-#sys.exit()
-
-#df = pd.read_csv('./first_100') # THIS DATAFRAME CONTAINS THE FIRST 500 ROWS and column 25-4000 are sliced away using awk.
 abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
 df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
 population =initialize_population(predictors, init_pop_size)
-#print(df.columns)
-
 
 best_models  = []
 model_predictors = []
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
-    #print(best_model_info)
-    #sys.exit()
     best_model = [best_model_info[1]]
     best_model.append(best_model_info[2])
     best_model.append(best_model_info[3])
     best_model.append(best_model_info[4])
-
-    #model_predictors.append(best_model_info[2])
     best_models.append(best_model)
     print("Generation:", (i + 1))
     print(best_model)
@@ -301,7 +281,3 @@ with open("best_models.txt", "w") as file:
                      f"Coefficients: {coefficients_list}\n\n")
         # Write to file
         file.write(data_line)
-        # Also print the data line to console
-        #print(data_line)
-
-# It's important to close the file after writing to ensure data is properly saved
