@@ -70,9 +70,9 @@ def make_prediction(best_model, df):
     
     # Initialize a new Ridge model with predefined intercept and coefficients
     # Note: You will need to replace `predefined_coefficients` with your actual coefficients array
-    model = Ridge(alpha=40)
+    model = Ridge(alpha=1040)
     model.intercept_ = 15.636646469994025
-    coefs = [coef for index, coef in enumerate(best_model[3]) if index != 0]
+    coefs = [coef for index, coef in enumerate(best_model[3])]
 
     # Create a list of columns to exclude
     selected_columns = best_model[2]
@@ -120,7 +120,7 @@ plt.grid(True)
 lims = [min(min(predicted_lat), min(actual_lat)), max(max(predicted_lat), max(actual_lat))]
 plt.plot(lims, lims, 'k-', alpha=0.75, zorder=0)
 
-plt.savefig("results/08042024.png")
+plt.savefig("results/results.png")
             
 
 
