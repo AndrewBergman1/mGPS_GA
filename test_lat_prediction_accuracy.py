@@ -11,9 +11,11 @@ def find_best_model() :
         generation_found = False
         grab_r_squared = False
         grab_predictors = False
+        coefs_found = False
         best_gen = ""
         best_r2 = ""
         predictors = ""
+        alpha = 1
         for line in file :
             if line.startswith("Generation:") :
                 generation_found = True
@@ -44,12 +46,21 @@ def find_best_model() :
                 coefs = [float(match) for match in matches]
 
                 print(coefs)
-
+                coefs_found = True
+                generation_found = False
+                grab_r_squared = False
+                grab_predictors = False
+            
+            if generation_found and grab_r_squared and grab_predictors and coefs_found and line.startswith("alpha") :
+                alpha = line.strip()
+                matches = re.findall(r'alpha:\s*(\d+)', alpha)
+                alpha = float(matches)
+                coefs_found = False
                 generation_found = False
                 grab_r_squared = False
                 grab_predictors = False
                 
-        return [best_gen, best_r2, predictors, coefs]
+        return [best_gen, best_r2, predictors, coefs, alpha]
     
 def load_data_file(abundance_file, metadata_file) :
     abundance_df = pd.read_csv(abundance_file)
@@ -70,13 +81,13 @@ def make_prediction(best_model, df):
     
     # Initialize a new Ridge model with predefined intercept and coefficients
     # Note: You will need to replace `predefined_coefficients` with your actual coefficients array
-    model = Ridge(alpha=1040)
-    model.intercept_ = 15.636646469994025
+    model = Ridge(alpha=best_model[4]) # Find the alpha value 
     coefs = [coef for index, coef in enumerate(best_model[3])]
+
+    model.intercept_ = best_model[3][0]
 
     # Create a list of columns to exclude
     selected_columns = best_model[2]
-
     selected_columns = [col for col in selected_columns if col not in ["uuid", "unnamed: 0", "longitude", "latitude"]]
     
     # Select columns that are not in the exclude list
@@ -87,18 +98,18 @@ def make_prediction(best_model, df):
 
     model.coef_ = np.array(coefs)
 
-
     # Standardizing predictors since it's good practice with Ridge regression
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(validation_data)
-
+    #scaler = StandardScaler()
+    X_scaled = validation_data[selected_columns].values
     predictions = model.predict(X_scaled)
 
     return predictions
 
-def extract_lat(validation_data) :
-    latitude = validation_data["latitude"]
-    return latitude
+def extract_lat(validation_data):
+    scaler = StandardScaler()
+    # Reshape data using .values.reshape(-1, 1) if 'latitude' is a single column
+    latitude_scaled = scaler.fit_transform(validation_data[['latitude']])
+    return latitude_scaled
 
 
 
@@ -109,7 +120,8 @@ model = find_best_model()
 
 predicted_lat = make_prediction(model, df)
 actual_lat = extract_lat(df)
-
+predicted_lat = np.array(predicted_lat).flatten()
+actual_lat = np.array(actual_lat).flatten()
 plt.scatter(predicted_lat, actual_lat)
 plt.xlabel('Predicted Latitude')
 plt.ylabel('Actual Latitude')
