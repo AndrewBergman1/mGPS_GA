@@ -119,4 +119,7 @@ I also made a new script for making model predictions. It's not complete yet, fi
 
 ## 15/4 2024
 After a long run (50 generations), the predictive ability of latitude is poor (MSE = 1316). I will remove the early stopping function since it seems to halt the GA too much. 
-![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/150424.png)
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/15042024.png)
+
+Model predictive ability: 
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/150424.png)

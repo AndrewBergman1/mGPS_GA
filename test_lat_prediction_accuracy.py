@@ -81,10 +81,6 @@ def make_prediction(best_model, df):
     
     # Initialize a new Ridge model with predefined intercept and coefficients
     # Note: You will need to replace `predefined_coefficients` with your actual coefficients array
-    model = Ridge(alpha=best_model[4]) # Find the alpha value 
-    coefs = [coef for index, coef in enumerate(best_model[3])]
-
-    model.intercept_ = best_model[3][0]
 
     # Create a list of columns to exclude
     selected_columns = best_model[2]
