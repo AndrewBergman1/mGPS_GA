@@ -14,7 +14,8 @@ Parameters that may need tuning:
 The other parameters are better, the bigger they are. 
  
 150424.png: 
-The graph shows the GA performance for 50 generations. The best MSE = 1316, which is not good enough. I will remove the early-stop function as it seems to stop too early, leading to better results not being able to show. 
-
+The graph shows the GA performance for 50 generations. The best MSE = 1316, which is not good enough. I will remove the early-stop function as it seems to stop too early, leading to better results not being able to show. The early-stop function was implemented to optimize the run time. I will also withold mutations from the two highesat randked individuals to preserve their scores. Assumptions that remain include alpha (lambda) and the initial mutation rate.
 The following command ran for 40 hours: nohup python3 single_core_test.py 0.3 0.9 0.2 100 100 2 50 3 &
-    - Since i removed early stopping, the subsequent runs will take more time. 
+    - Since i removed early stopping, the subsequent runs will take more time.
+
+ 

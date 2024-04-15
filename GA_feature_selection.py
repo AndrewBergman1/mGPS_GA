@@ -179,7 +179,7 @@ def crossover(parents, no_offspring, no_crossovers):
     return offspring_population
 
 def mutate_offspring(offspring_population, mutation_rate):
-    for offspring in offspring_population:
+    for offspring in offspring_population[2:]: # Skip the two best offspring, so that their scores are preserved.
         for i in range(len(offspring)):
             if np.random.rand() < mutation_rate:
                 offspring[i] = 0 if offspring[i] == 1 else 1
