@@ -1,0 +1,6 @@
+
+EnvironmentNameNotFound: Could not find conda environment: GA_feature_selection
+You can list all discoverable environments with `conda info --envs`.
+
+
+slurmstepd: error: *** JOB 542930 ON cn012 CANCELLED AT 2024-04-15T14:14:14 ***
