@@ -58,7 +58,6 @@ def extract_predictors(df) :
     columns = [col for col in df.columns if col not in ['longitude', 'latitude', 'uuid', 'Unnamed: 0']]
     df = df[columns]
     df = df.apply(pd.to_numeric, errors='coerce')
-
     return df
 
 def extract_response_variables(df) : 
@@ -108,24 +107,7 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
   
     # making predictions 
     predictions = model.predict(X_test) 
-    # Standardize predictors
-    #scaler = StandardScaler()
-    #X_train_scaled = scaler.fit_transform(X_train)
-    #X_test_scaled = scaler.transform(X_test)
 
-    # RidgeCV is used to find a reasonable alpha value. The longer the span, the longer the run. 
-    #alphas = list(range(950, 1050, 10))  # Alpha range
-    #model_cv = RidgeCV(alphas=alphas, store_cv_values=True)
-    #model_cv.fit(X_train_scaled, y_train)
-
-    # Train the Ridge model on the entire training set using the best alpha found
-    #model = Ridge(alpha=model_cv.alpha_)
-    #model.fit(X_train_scaled, y_train)
-
-    # Evaluate the model on the test set
-    #y_pred = model.predict(X_test_scaled)
-    #test_error = mean_squared_error(y_test, y_pred)
-    # fitting the model 
     model.fit(X_train, y_train) 
   
 # making predictions 
@@ -137,7 +119,8 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
     #means = scaler.mean_
     #var = scaler.var_
     # Return the evaluation results including the test error, best alpha, and model coefficients
-    return [individual_index, test_error, individual, 0, coefficients, 0, 0, intercept] #model_cv.alpha, means, vars
+
+    return [individual_index, test_error, individual, coefficients, intercept] #model_cv.alpha, means, vars
 
 def evaluate_fitness(population, predictors, response_variables):
     models = []
@@ -270,13 +253,12 @@ model_predictors = []
 
 for i in range(no_generations):
     population, best_model_info = run_GA(population, predictors, response_variables)
-    best_model = [best_model_info[1]]
+    best_model = [best_model_info[0]]
+    best_model.append(best_model_info[1])
     best_model.append(best_model_info[2])
     best_model.append(best_model_info[3])
     best_model.append(best_model_info[4])
-    best_model.append(best_model_info[5])
-    best_model.append(best_model_info[6])
-    best_model.append(best_model_info[7])
+
 
     best_models.append(best_model)
     print("Generation:", (i + 1))
@@ -288,22 +270,19 @@ save_png(best_models)
 with open("best_models.txt", "w") as file:
     # Iterate over each generation's best model data
     for gen_index, model_info in enumerate(best_models):
-        r_squared, representation, alpha, coefficients, means, vars, intercept  = model_info
+        individual_number, test_error, representation, coefficients, intercept  = model_info
         # Convert representation to a string of column names (assuming representation is a list of selected feature indices)
-        selected_features = ', '.join(df.columns[i] for i, selected in enumerate(representation) if selected)
-
+        selected_features = ', '.join(df.columns[i] for i, selected in enumerate(representation) if df.columns[i] not in ["uuid", "Unnamed: 0", "longitude", "latitude"] and representation[i] == 1)
+        
         coefficients_list = list(coefficients)  # Convert NumPy array to list
-        means_list = list(means)
-        vars_list = list(vars)
-
+        print(len(df.columns))
+        print(selected_features)
+        print(len(selected_features))
         # Prepare the data line
         data_line = (f"Generation: {gen_index + 1}\n"
-                     f"R²: {r_squared}\n"
+                     f"R²: {test_error}\n"
                      f"Selected Features: {selected_features}\n"
-                     f"Alpha: {alpha}\n"
                      f"Coefficients: {coefficients_list}\n\n"
-                     f"Means : {means_list}\n\n"
-                     f"Vars: {vars_list}\n\n"
-                     f"Intercept: {intercept}")
+                     f"Intercept: {intercept}\n\n")
         # Write to file
         file.write(data_line)
