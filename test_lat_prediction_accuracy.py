@@ -121,17 +121,18 @@ def make_prediction(best_model, df):
     model.intercept_ = best_model[7]
 
     # Standardizing predictors with regard to validation data's mean and variance
-    #scaler = StandardScaler()
-    #X_scaled = scaler.fit_transform(validation_data)
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(validation_data)
 
     means = best_model[5]
     stds = np.sqrt(best_model[6])
-
+    '''
     index = 0
     for series_name, series in validation_data.items():  
         new_series = (series - means[index]) / stds[index]
         validation_data[series_name] = new_series
         index = index + 1      
+    '''
 
     # Change NaN to 0 and remove infinite numbers
     # There are positive infinite numbers in the data frame that are replaced with 0.
@@ -148,7 +149,7 @@ def make_prediction(best_model, df):
 
     print(np.any(np.isnan(validation_data)))
     print(np.all(np.isfinite(validation_data)))
-    predictions = model.predict(validation_data)
+    predictions = model.predict(X_scaled)
     
     return predictions
 
