@@ -12,7 +12,7 @@
 
 
 # python3 single_core_test.py 0.3 0.9 0.05 20 20 2 2 3 TAKES 5 MINUTES PER GENERATION
-
+import math
 import pandas as pd
 import random as rd
 import statsmodels.api as sm
@@ -53,7 +53,7 @@ def import_coordinates(abundance_df, meta_df) :
     return df
 
 def extract_predictors(df) :
-    columns = [col for col in df.columns if col not in ['longitude', 'latitude', 'uuid']]
+    columns = [col for col in df.columns if col not in ['longitude', 'latitude', 'uuid', 'Unnamed: 0']]
     df = df[columns]
     df = df.apply(pd.to_numeric, errors='coerce')
 
@@ -86,7 +86,6 @@ def initialize_population(predictors, init_pop_size) :
 def evaluate_individual_fitness(individual_index, individual, predictors, response_variables):
     # Select predictors based on the individual's genes
     selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
-
     # Check if any predictors are selected; if not, return a penalty score
     if selected_predictor_data.empty:
         return [individual_index, -np.inf, individual, None, None]  # With penalty
@@ -119,9 +118,12 @@ def evaluate_individual_fitness(individual_index, individual, predictors, respon
 
     # Retrieve the model's coefficients
     coefficients = model.coef_
+    intercept = model.intercept_
 
+    means = scaler.mean_
+    var = scaler.var_
     # Return the evaluation results including the test error, best alpha, and model coefficients
-    return [individual_index, test_error, individual, model_cv.alpha_, coefficients]
+    return [individual_index, test_error, individual, model_cv.alpha_, coefficients, means, var, intercept]
 
 def evaluate_fitness(population, predictors, response_variables):
     models = []
@@ -195,6 +197,8 @@ def run_GA(population, predictors, response_variables) :
         if no_improvement_count >= early_stopping_generations:
             print("Early stopping...")
             break
+        #print(len(sorted_models[0][6]))
+        #print(len(sorted_models[0][5]))
 
         dynamic_mutation_rate = adapt_mutation_rate(mutation_rate, generation, no_generations)
         parents = tournament_selection(sorted_models)
@@ -206,7 +210,6 @@ def run_GA(population, predictors, response_variables) :
         population[:elitism_count] = [model[2] for model in sorted_models[:elitism_count]]
 
         #print(sorted_models)
-
         best_models.append(sorted_models[0])  # track the best model each generation
 
 
@@ -257,6 +260,10 @@ for i in range(no_generations):
     best_model.append(best_model_info[2])
     best_model.append(best_model_info[3])
     best_model.append(best_model_info[4])
+    best_model.append(best_model_info[5])
+    best_model.append(best_model_info[6])
+    best_model.append(best_model_info[7])
+
     best_models.append(best_model)
     print("Generation:", (i + 1))
     print(best_model)
@@ -267,17 +274,22 @@ save_png(best_models)
 with open("best_models.txt", "w") as file:
     # Iterate over each generation's best model data
     for gen_index, model_info in enumerate(best_models):
-        r_squared, representation, alpha, coefficients = model_info
+        r_squared, representation, alpha, coefficients, means, vars, intercept  = model_info
         # Convert representation to a string of column names (assuming representation is a list of selected feature indices)
         selected_features = ', '.join(df.columns[i] for i, selected in enumerate(representation) if selected)
 
         coefficients_list = list(coefficients)  # Convert NumPy array to list
+        means_list = list(means)
+        vars_list = list(vars)
 
         # Prepare the data line
         data_line = (f"Generation: {gen_index + 1}\n"
                      f"R²: {r_squared}\n"
                      f"Selected Features: {selected_features}\n"
                      f"Alpha: {alpha}\n"
-                     f"Coefficients: {coefficients_list}\n\n")
+                     f"Coefficients: {coefficients_list}\n\n"
+                     f"Means : {means_list}\n\n"
+                     f"Vars: {vars_list}\n\n"
+                     f"Intercept: {intercept}")
         # Write to file
         file.write(data_line)
