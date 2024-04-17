@@ -9,6 +9,8 @@ import math
 from sklearn.linear_model import LinearRegression 
 from sklearn.metrics import mean_squared_error, mean_absolute_error 
 from sklearn import preprocessing 
+np.set_printoptions(threshold=np.inf)
+
 def find_best_model() : 
     with open("best_models.txt", "r") as file :
         best_gen = ""
@@ -30,7 +32,7 @@ def find_best_model() :
             
             elif line.startswith("R²"): 
                 r_value = line.strip()
-                matches = re.findall(r'R²:\s*(\d+\.?\d*)', r_value)
+                matches = re.findall(r'R²:\s*\[(\d+\.\d+)\]', r_value)
                 r_value = float(matches[0])
             
             elif line.startswith("Selected Features"):
@@ -44,13 +46,13 @@ def find_best_model() :
             
             elif line.startswith("Coefficients:"):
                 coefs = line.strip()
-                matches = re.findall(r'[-+]?\d*\.\d+|[-+]?\d+', coefs)
+                matches = re.findall(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?', coefs)
                 # Convert all found matches to floats
                 coefs = [float(match) for match in matches]
 
             elif line.startswith("Intercept") :
                 intercept = line.strip()
-                matches = re.findall(r'Intercept:\s*(-?\d+\.?\d*)', intercept)
+                matches = re.findall(r'Intercept:\s*\[(\d+\.\d+)\]', intercept)
                 intercept = float(matches[0])
                 last_row = True
             
@@ -60,6 +62,7 @@ def find_best_model() :
                     best_coefs = coefs
                     best_predictors = predictors
                     best_intercept = intercept
+        
         return [best_gen, best_r2, best_predictors, best_coefs, best_intercept] #best_alpha, best_means, best_vars
     
 def load_data_file(validation_file, metadata_file) :
@@ -88,12 +91,13 @@ def make_prediction(best_model, df):
     # Initialize a new Linear Regression model
     model = LinearRegression()
 
+     
+ 
     # Assuming best_model[3] is the list of coefficients and best_model[4] is the intercept
     # Make sure that the length of selected_columns matches the number of coefficients
     if len(selected_columns) != len(best_model[3]):
         raise ValueError("The number of selected features does not match the number of coefficients.")
 
- 
 
     model.coef_ = np.array(best_model[3])
     model.intercept_ = best_model[4]

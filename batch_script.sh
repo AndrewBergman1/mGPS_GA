@@ -12,4 +12,4 @@ module load Anaconda3/2024.02-1  # Adjust as per module available on your cluste
 source activate /home/andrewb/miniconda3/envs/GA_feature_selection
 
 # Run your Python script
-python /home/andrewb/GA_feature_selection/single_core_test.py 0.3 0.9 0.2 20 20 2 20 3 || echo "Script failed with exit code $?"
+python /home/andrewb/GA_feature_selection/lasso.py 0.3 0.9 0.2 20 20 2 1 3 || echo "Script failed with exit code $?"

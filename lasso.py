@@ -33,6 +33,11 @@ import time
 from sklearn.linear_model import LinearRegression 
 from sklearn.metrics import mean_squared_error, mean_absolute_error 
 from sklearn import preprocessing 
+import multiprocessing
+import logging
+
+np.set_printoptions(threshold=np.inf, suppress=True, linewidth=np.inf)
+
 #from concurrent.futures import ProcessPoolExecutor
 
 #Sets the seed
@@ -60,12 +65,12 @@ def extract_predictors(df) :
     df = df.apply(pd.to_numeric, errors='coerce')
     return df
 
-def extract_response_variables(df) : 
-    columns = [col for col in df.columns if col in ['longitude', 'latitude']]
-    df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
+def extract_response_variables(df):
+    # Convert 'latitude' column to numeric, coercing errors
     df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
-
-    return df[columns]
+    
+    # Return the DataFrame containing only the 'latitude' column
+    return df[['latitude']]
 
 def initialize_population(predictors, init_pop_size) :
     td = 0.5
@@ -84,52 +89,31 @@ def initialize_population(predictors, init_pop_size) :
         population.append(individual)
     return population
 
-def evaluate_individual_fitness(individual_index, individual, predictors, response_variables):
-    # Select predictors based on the individual's genes
-    selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
-    # Check if any predictors are selected; if not, return a penalty score
-    if selected_predictor_data.empty:
-        return [individual_index, -np.inf, individual, None, None]  # With penalty
+def evaluate_batch_fitness(batch):
+    results = []
+    for individual_index, individual, predictors, response_variables in batch:
+        selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
+        if selected_predictor_data.empty:
+            results.append((individual_index, float('inf'), individual, [], [0, 0]))  # No predictors case
+        else:
+            X_train, X_test, y_train, y_test = train_test_split(selected_predictor_data, response_variables, test_size=0.1, random_state=42)
+            model = LinearRegression()
+            model.fit(X_train, y_train)
+            predictions = model.predict(X_test)
+            mse = mean_squared_error(y_test, predictions, multioutput='raw_values')  # Separate MSE for each response
+            results.append((individual_index, mse, individual, model.coef_, model.intercept_))
+            print(f"Individual {individual_index}: MSE={mse}, Intercept={str(model.intercept_)[1:-1]}, Coefficients={model.coef_}")
+    return results
 
-    # Split data into training and test sets (90% train, 10% test)
-    X_train, X_test, y_train, y_test = train_test_split(
-        selected_predictor_data, 
-        response_variables.iloc[:, 0], 
-        test_size=0.1, 
-        random_state=42
-    )
-
-     #creating a regression model 
-    model = LinearRegression() 
-  
-    # fitting the model 
-    model.fit(X_train, y_train) 
-  
-    # making predictions 
-    predictions = model.predict(X_test) 
-
-    model.fit(X_train, y_train) 
-  
-# making predictions 
-    predictions = model.predict(X_test) 
-    # Retrieve the model's coefficients
-    coefficients = model.coef_
-    intercept = model.intercept_
-    test_error = mean_squared_error(y_test, predictions)
-    #means = scaler.mean_
-    #var = scaler.var_
-    # Return the evaluation results including the test error, best alpha, and model coefficients
-
-    return [individual_index, test_error, individual, coefficients, intercept] #model_cv.alpha, means, vars
-
-def evaluate_fitness(population, predictors, response_variables):
-    models = []
-
-    # Sequentially evaluate the fitness of each individual
-    for index, individual in enumerate(population):
-        result = evaluate_individual_fitness(index, individual, predictors, response_variables)
-        models.append(result)
-    return models
+def evaluate_fitness_parallel(executor, population, predictors, response_variables):
+    args = [(index, individual, predictors, response_variables) for index, individual in enumerate(population)]
+    batches = [args[i:i + 3] for i in range(0, len(args), 3)]
+    future_to_batch = {executor.submit(evaluate_batch_fitness, batch): batch for batch in batches}
+    results = []
+    for future in as_completed(future_to_batch):
+        batch_results = future.result()
+        results.extend(batch_results)
+    return results
 
 def rank_population(models) : 
     sorted_list = sorted(models, key=lambda x: abs(x[1]))
@@ -176,13 +160,13 @@ def mutate_offspring(offspring_population, mutation_rate):
                 offspring[i] = 0 if offspring[i] == 1 else 1
     return offspring_population
 
-def run_GA(population, predictors, response_variables) : 
+def run_GA(executor, population, predictors, response_variables) : 
     best_models = []
     no_improvement_count = 0
     best_score = np.inf  
     early_stopping_generations = float(no_generations*0.9) # Stop if no improvements after 90% of the gens
     for generation in range(no_generations):
-        models = evaluate_fitness(population, predictors, response_variables)
+        models = evaluate_fitness_parallel(executor, population, predictors, response_variables)
         sorted_models = rank_population(models)
         
         if sorted_models[0][1] < best_score:
@@ -242,6 +226,8 @@ reproductive_units = int(sys.argv[6]) - 1
 no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
+executor = ProcessPoolExecutor(max_workers=24)
+
 abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
 df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
@@ -252,7 +238,7 @@ best_models  = []
 model_predictors = []
 
 for i in range(no_generations):
-    population, best_model_info = run_GA(population, predictors, response_variables)
+    population, best_model_info = run_GA(executor, population, predictors, response_variables)
     best_model = [best_model_info[0]]
     best_model.append(best_model_info[1])
     best_model.append(best_model_info[2])
@@ -266,23 +252,16 @@ for i in range(no_generations):
 
 save_png(best_models)
 
+
 # Open the file for writing
 with open("best_models.txt", "w") as file:
     # Iterate over each generation's best model data
-    for gen_index, model_info in enumerate(best_models):
-        individual_number, test_error, representation, coefficients, intercept  = model_info
-        # Convert representation to a string of column names (assuming representation is a list of selected feature indices)
-        selected_features = ', '.join(df.columns[i] for i, selected in enumerate(representation) if df.columns[i] not in ["uuid", "Unnamed: 0", "longitude", "latitude"] and representation[i] == 1)
-        
-        coefficients_list = list(coefficients)  # Convert NumPy array to list
-        print(len(df.columns))
-        print(selected_features)
-        print(len(selected_features))
-        # Prepare the data line
-        data_line = (f"Generation: {gen_index + 1}\n"
-                     f"R²: {test_error}\n"
-                     f"Selected Features: {selected_features}\n"
-                     f"Coefficients: {coefficients_list}\n\n"
-                     f"Intercept: {intercept}\n\n")
-        # Write to file
-        file.write(data_line)
+    for gen_index, (individual_number, test_error, representation, coefficients, intercept) in enumerate(best_models):
+            selected_features = ', '.join(df.columns[i] for i, bit in enumerate(representation) if bit == 1)
+            coefficients_str = np.array2string(coefficients, separator=', ')
+            data_line = f"Generation: {gen_index + 1}\n" \
+                        f"R²: {test_error}\n" \
+                        f"Selected Features: {selected_features}\n" \
+                        f"Coefficients: {coefficients_str}\n" \
+                        f"Intercept: {intercept}\n\n"  # Ensure intercept is written once
+            file.write(data_line)
