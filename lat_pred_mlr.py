@@ -80,33 +80,19 @@ def import_coordinates(validation_df, meta_df) :
     return df
 
 def make_prediction(best_model, df):
-    # Ensure 'df' is your prepared DataFrame with the same feature columns used during model training
-
-    # Select the columns based on your model's feature importance or coefficients
-
     selected_columns = [col for col in df.columns if col in best_model[2]]
-    validation_data = df[selected_columns]
-    #print(len(best_model[2]))
-    #print(len(validation_data.columns))
-    #sys.exit()
-    # Initialize a new Linear Regression model
+    validation_data = df[selected_columns].values  # Convert to numpy array to avoid feature name issues
+
     model = LinearRegression()
 
-     
- 
-    # Assuming best_model[3] is the list of coefficients and best_model[4] is the intercept
-    # Make sure that the length of selected_columns matches the number of coefficients
     if len(selected_columns) != len(best_model[3]):
         raise ValueError("The number of selected features does not match the number of coefficients.")
 
-
-    model.coef_ = np.array(best_model[3])
-    model.intercept_ = best_model[4]
-
-  
-    # Print shapes to debug
-    print("Validation data shape:", validation_data.shape)
-    print("Coefficients shape:", model.coef_.shape)
+    # Dummy fitting
+    dummy_X = np.zeros((len(best_model[3]), len(best_model[3])))
+    np.fill_diagonal(dummy_X, 1)
+    dummy_y = np.dot(dummy_X, best_model[3]) + best_model[4]
+    model.fit(dummy_X, dummy_y)
 
     # Making predictions
     predictions = model.predict(validation_data)
