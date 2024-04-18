@@ -83,6 +83,7 @@ def make_prediction(best_model, df):
     # Ensure 'df' is your prepared DataFrame with the same feature columns used during model training
 
     # Select the columns based on your model's feature importance or coefficients
+
     selected_columns = [col for col in df.columns if col in best_model[2]]
     validation_data = df[selected_columns]
     #print(len(best_model[2]))
@@ -138,9 +139,8 @@ def make_prediction(best_model, df):
     return predictions
 
 def extract_lat(validation_data):
-    scaler = StandardScaler()
     # Reshape data using .values.reshape(-1, 1) if 'latitude' is a single column
-    latitude_scaled = scaler.fit_transform(validation_data[['latitude']])
+    latitude_scaled = validation_data[['latitude']]
     return latitude_scaled
 
 
