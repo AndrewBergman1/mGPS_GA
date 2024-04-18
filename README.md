@@ -128,3 +128,4 @@ Model predictive ability (OBS: R2 IS IN REALITY MSE!!!!!!!):
 Ridge regression (MSE ~ 1300) yields poor predictive ability. The predicted data is centered around lat = 0, perhaps suggesting that the coefficients are penalized to hard. Using cross-validation, alpha = 1040 (950 - 1550, step = 10). The reasoning behind using ridge regression was to deal with the significcant multicollinearity exhibited by some taxa, resulting in either VIF = None or VIF = inf. I have constructed a correlation matrix and removed one of the variables, if abs(corr) > 0.6. Then i filtered for VIF < 5. This reduces multicollinearity and should provide grounds to use MLS again.
 
 I also realized lat_pred_mlr.py had logical issues, where the predictor variables imported from the model didn't correspond to the features that were selected for predictions. This has been resolved. 
+
