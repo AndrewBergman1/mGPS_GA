@@ -139,9 +139,7 @@ def make_prediction(best_model, df):
     return predictions
 
 def extract_lat(validation_data):
-    # Reshape data using .values.reshape(-1, 1) if 'latitude' is a single column
-    latitude_scaled = validation_data[['latitude']]
-    return latitude_scaled
+    return validation_data['latitude'].values
 
 
 
