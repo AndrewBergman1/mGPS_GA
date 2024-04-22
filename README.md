@@ -135,3 +135,8 @@ I have made adjustments to the prediction-script, it should now work properly. E
 ## 20/4 2024
 559415 : 3 crossover points, Td = 0.5
 561511 : 10 CO, Td = 0.9
+
+## 24/4 2024
+Good results from the GA. I've ran lasso.py 0.3 0.9 0.05 500 500 2 500 3 and the following results were yielded.
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/150424.png)
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/150424.png)
