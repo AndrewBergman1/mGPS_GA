@@ -174,53 +174,46 @@ def run_GA(executor, population, predictors, response_variables, no_generations,
     best_score = np.inf  
     early_stopping_generations = float(no_generations * 0.9)  # Stop if no improvements after 90% of the gens
     
-    for generation in range(no_generations):
-        models = evaluate_fitness_parallel(executor, population, predictors, response_variables)
-        sorted_models = rank_population(models)
+    
+    models = evaluate_fitness_parallel(executor, population, predictors, response_variables)
+    sorted_models = rank_population(models)
         
-        if sorted_models[0][1] < best_score:
-            best_score = sorted_models[0][1]
-            no_improvement_count = 0
-        else:
-            no_improvement_count += 1
+    if sorted_models[0][1] < best_score:
+        best_score = sorted_models[0][1]
+        no_improvement_count = 0
+    else:
+        no_improvement_count += 1
         
-        if no_improvement_count >= early_stopping_generations:
-            print("Early stopping...")
-            break
+    if no_improvement_count >= early_stopping_generations:
+        print("Early stopping...")
 
-        # Elitism: preserve the top N individuals
-        elitism_count = 2  # Number of individuals to pass directly to the next generation
-        elite_individuals = [model[2] for model in sorted_models[:elitism_count]]
+    # Elitism: preserve the top N individuals
+    elitism_count = 5  # Number of individuals to pass directly to the next generation
+    elite_individuals = [model[2] for model in sorted_models[:elitism_count]]
 
-        # Adjust mutation rate dynamically
-        dynamic_mutation_rate = adapt_mutation_rate(mutation_rate, generation, no_generations)
+    # Adjust mutation rate dynamically
+    #dynamic_mutation_rate = adapt_mutation_rate(mutation_rate, generation, no_generations)
+    # Selection and generation of new offspring
+    parents = tournament_selection(sorted_models[:elitism_count])  
+    offspring_population = parallel_crossover_mutation(parents, no_offspring - elitism_count, no_crossovers, mutation_rate, executor)
 
-        # Selection and generation of new offspring
-        parents = tournament_selection(sorted_models)  
-        offspring_population = parallel_crossover_mutation(parents, no_offspring - elitism_count, no_crossovers, dynamic_mutation_rate, executor)
+    # Merge elite individuals with offspring to form the new population
+    population = elite_individuals + offspring_population
 
-        # Merge elite individuals with offspring to form the new population
-        population = elite_individuals + offspring_population
-
-        best_models.append(sorted_models[0])  # Track the best model each generation
-        print(f"Generation {generation + 1}: Best score {best_score}")
+    best_models.append(sorted_models[0])  # Track the best model each generation
+    #print(f"Generation {generation + 1}: Best score {best_score}")
 
     return population, best_models[0]
 
 
 def save_png(best_models):
-    end_time = time.time()
-    tot_time = end_time - start_time
-    title = "GA Feature Selection Performance: " + str(tot_time)
-    plt.figure(figsize=(19.2, 10.2))
-    mse = [model[1] for model in best_models]  # Extract MSE 
-
-    #print(mse)
-    x = range(len(mse))
-    plt.plot(x, mse, marker='o')  # Plot MSE values
-    plt.title(title)
+    plt.figure(figsize=(10, 5))
+    mse = [model[1] for model in best_models]  # Assuming the second element is MSE
+    plt.plot(mse, marker='o', linestyle='-', color='b')
+    plt.title(f"Genetic Algorithm Performance Over Generations (Total time: {time.time() - start_time:.2f}s)")
     plt.xlabel('Generation')
-    plt.ylabel('R² Value')
+    plt.ylabel('Mean Squared Error (MSE)')
+    plt.grid(True)
     plt.savefig('GA_Feature_Selection_Performance.png')
     plt.close()
     
@@ -240,7 +233,7 @@ no_crossovers = int(sys.argv[8])
 
 executor = ProcessPoolExecutor(max_workers=24)
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
+abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_200.csv")
 df = import_coordinates(abundance_df, meta_df)
 predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
