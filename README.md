@@ -137,6 +137,6 @@ I have made adjustments to the prediction-script, it should now work properly. E
 561511 : 10 CO, Td = 0.9
 
 ## 24/4 2024
-Good results from the GA. I've ran lasso.py 0.3 0.9 0.05 500 500 2 500 3 and the following results were yielded.
+Good results from the GA. I've ran lasso.py 0.3 0.9 0.05 500 500 2 500 3 and the following results were yielded. MSE = 122. I will try to further reduce it by implementing crossvalidation.
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/220424.png)
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/220424.png)
