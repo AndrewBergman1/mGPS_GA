@@ -68,7 +68,7 @@ def find_best_model() :
         return [best_gen, best_r2, best_predictors, best_coefs, best_intercept] #best_alpha, best_means, best_vars
     
 def load_data_file(validation_file, metadata_file) :
-    validation_df = pd.read_csv(validation_file)
+    validation_df = pd.read_csv(validation_file, index_col=0)
     meta_df = pd.read_csv(metadata_file)
     return validation_df, meta_df
 
@@ -86,10 +86,10 @@ def make_prediction(best_model, df):
 
     # Select the columns based on your model's feature importance or coefficients
 
-    selected_columns = [col for col in df.columns if col in best_model[2] if col not in ["uuid", "longitude", "latitude"]]
+    selected_columns = [col for col in df.columns if col in best_model[2] if col not in ["uuid", "longitude", "latitude", "Unnamed: 0"]]
     validation_data = df[selected_columns]
-    #print(best_model[2])
-    #print(validation_data.columns)
+    print(len(best_model[3]))
+    print(len(validation_data.columns))
     #sys.exit()
     # Initialize a new Linear Regression model
     model = LinearRegression()

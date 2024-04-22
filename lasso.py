@@ -45,7 +45,7 @@ start_time = time.time()
 
 
 def load_data_file(abundance_file, metadata_file) :
-    abundance_df = pd.read_csv(abundance_file)
+    abundance_df = pd.read_csv(abundance_file, index_col=0)
     meta_df = pd.read_csv(metadata_file)
     return abundance_df, meta_df
 

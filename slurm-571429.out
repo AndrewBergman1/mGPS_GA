@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/andrewb/GA_feature_selection/lasso.py", line 237, in <module>
+    df = import_coordinates(abundance_df, meta_df)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/andrewb/GA_feature_selection/lasso.py", line 53, in import_coordinates
+    coordinates = meta_df[['uuid', 'longitude', 'latitude']].copy()  # Copying the slice to a new DataFrame
+                  ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/pandas/core/frame.py", line 3899, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, "columns")[1]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 6115, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+  File "/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 6179, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['uuid'] not in index"
+Script failed with exit code 1

@@ -13,4 +13,4 @@ module load Anaconda3/2024.02-1  # Adjust as per module available on your cluste
 source activate /home/andrewb/miniconda3/envs/GA_feature_selection
 
 # Run your Python script
-python /home/andrewb/GA_feature_selection/lasso.py 0.3 0.9 0.05 100 100 2 200 10 || echo "Script failed with exit code $?"
+python /home/andrewb/GA_feature_selection/lasso.py 0.3 0.9 0.05 100 100 2 10 10 || echo "Script failed with exit code $?"
