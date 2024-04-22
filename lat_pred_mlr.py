@@ -52,7 +52,8 @@ def find_best_model() :
 
             elif line.startswith("Intercept") :
                 intercept = line.strip()
-                matches = re.findall(r'Intercept:\s*\[(\d+\.\d+)\]', intercept)
+                matches = re.findall(r'Intercept:\s*\[(-?\d+\.\d+)\]', intercept)
+
                 intercept = float(matches[0])
                 last_row = True
             
@@ -63,6 +64,7 @@ def find_best_model() :
                     best_predictors = predictors
                     best_intercept = intercept
         
+       
         return [best_gen, best_r2, best_predictors, best_coefs, best_intercept] #best_alpha, best_means, best_vars
     
 def load_data_file(validation_file, metadata_file) :
@@ -80,52 +82,42 @@ def import_coordinates(validation_df, meta_df) :
     return df
 
 def make_prediction(best_model, df):
-    selected_columns = [col for col in df.columns if col in best_model[2]]
-    validation_data = df[selected_columns].values  # Convert to numpy array to avoid feature name issues
+    # Ensure 'df' is your prepared DataFrame with the same feature columns used during model training
 
+    # Select the columns based on your model's feature importance or coefficients
+
+    selected_columns = [col for col in df.columns if col in best_model[2] if col not in ["uuid", "Unnamed: 0", "longitude", "latitude"]]
+    validation_data = df[selected_columns]
+    #print(len(best_model[2]))
+    #print(len(validation_data.columns))
+    #sys.exit()
+    # Initialize a new Linear Regression model
     model = LinearRegression()
-
+    model.coef_ = np.array(best_model[3])
+    model.intercept_ = best_model[4]
+     
+ 
+    # Assuming best_model[3] is the list of coefficients and best_model[4] is the intercept
+    # Make sure that the length of selected_columns matches the number of coefficients
+       # Print shapes to debug
+    print("Validation data shape:", validation_data.shape)
+    print("Coefficients shape:", model.coef_.shape)
     if len(selected_columns) != len(best_model[3]):
         raise ValueError("The number of selected features does not match the number of coefficients.")
+    
+    if not list(validation_data.columns) == best_model[2]:
+        raise ValueError("Features in validation data must match the features the model was trained on, in the same order.")
 
-    # Dummy fitting
-    dummy_X = np.zeros((len(best_model[3]), len(best_model[3])))
-    np.fill_diagonal(dummy_X, 1)
-    dummy_y = np.dot(dummy_X, best_model[3]) + best_model[4]
-    model.fit(dummy_X, dummy_y)
 
     # Making predictions
     predictions = model.predict(validation_data)
     return predictions
-    '''
-    index = 0
-    for series_name, series in validation_data.items():  
-        new_series = (series - means[index]) / stds[index]
-        validation_data[series_name] = new_series
-        index = index + 1      
-    '''
-
-    # Change NaN to 0 and remove infinite numbers
-    # There are positive infinite numbers in the data frame that are replaced with 0.
-    validation_data = validation_data.replace([np.nan, -np.inf, np.inf], 0)
-
-    # Importing means and variance from training data
-
-
-    #print(len(best_model[5]))
-    #print(len(best_model[6]))
-    # Standardize to the training data
-    #validation_data = (validation_data - means / stds)
-    
-
-    #print(np.any(np.isnan(validation_data)))
-   # print(np.all(np.isfinite(validation_data)))
-    #predictions = model.predict(X_scaled)
-    
-    return predictions
+ 
 
 def extract_lat(validation_data):
-    return validation_data['latitude'].values
+    # Reshape data using .values.reshape(-1, 1) if 'latitude' is a single column
+    latitude_scaled = validation_data[['latitude']]
+    return latitude_scaled
 
 
 

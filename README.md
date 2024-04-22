@@ -129,3 +129,9 @@ Ridge regression (MSE ~ 1300) yields poor predictive ability. The predicted data
 
 I also realized lat_pred_mlr.py had logical issues, where the predictor variables imported from the model didn't correspond to the features that were selected for predictions. This has been resolved. 
 
+## 18/4 2024
+I have made adjustments to the prediction-script, it should now work properly. Eran spoke to me about trying to use the metasub-subset that Leo McCarthy used when developing mGPS. I have commenced a run using 100 individuals for 50 generations, we'll see how it fares. It could be a good idea to reduce the number of predictor variables in each individuals (instead of Td = 0.5, perhaps Td = 0.9). This would yield faster run times as well as fewer gits in the end. Another point of improvement would be having more crossover points.
+
+## 20/4 2024
+559415 : 3 crossover points, Td = 0.5
+561511 : 10 CO, Td = 0.9

@@ -41,7 +41,6 @@ np.set_printoptions(threshold=np.inf, suppress=True, linewidth=np.inf)
 #from concurrent.futures import ProcessPoolExecutor
 
 #Sets the seed
-rd.seed(42)
 start_time = time.time()
 
 
@@ -73,7 +72,7 @@ def extract_response_variables(df):
     return df[['latitude']]
 
 def initialize_population(predictors, init_pop_size) :
-    td = 0.5
+    td = 0.9
 
     population = []
 
@@ -93,21 +92,29 @@ def evaluate_batch_fitness(batch):
     results = []
     for individual_index, individual, predictors, response_variables in batch:
         selected_predictor_data = predictors.iloc[:, [i for i, bit in enumerate(individual) if bit == 1]]
+              # Prepare predictor data by removing unwanted columns
+        excluded_columns = {'uuid', 'Unnamed: 0', 'longitude', 'latitude'}
+        selected_predictor_data = selected_predictor_data.drop(columns=[col for col in excluded_columns if col in predictors.columns])
+
+
+        # Predictors not in uuid, unnamed 0, long lat
+        
+        
         if selected_predictor_data.empty:
             results.append((individual_index, float('inf'), individual, [], [0, 0]))  # No predictors case
         else:
-            X_train, X_test, y_train, y_test = train_test_split(selected_predictor_data, response_variables, test_size=0.1, random_state=42)
+            X_train, X_test, y_train, y_test = train_test_split(selected_predictor_data, response_variables, test_size=0.1)
             model = LinearRegression()
             model.fit(X_train, y_train)
             predictions = model.predict(X_test)
             mse = mean_squared_error(y_test, predictions, multioutput='raw_values')  # Separate MSE for each response
             results.append((individual_index, mse, individual, model.coef_, model.intercept_))
-            print(f"Individual {individual_index}: MSE={mse}, Intercept={str(model.intercept_)[1:-1]}, Coefficients={model.coef_}")
+            #print(f"Individual {individual_index}: MSE={mse}, Intercept={str(model.intercept_)[1:-1]}, Coefficients={model.coef_}")
     return results
 
 def evaluate_fitness_parallel(executor, population, predictors, response_variables):
     args = [(index, individual, predictors, response_variables) for index, individual in enumerate(population)]
-    batches = [args[i:i + 3] for i in range(0, len(args), 3)]
+    batches = [args[i:i + 20] for i in range(0, len(args), 20)]
     future_to_batch = {executor.submit(evaluate_batch_fitness, batch): batch for batch in batches}
     results = []
     for future in as_completed(future_to_batch):
@@ -138,33 +145,35 @@ def adapt_mutation_rate(initial_rate, generation, total_generations):
     # Decrease mutation rate as the algorithm progresses
     return initial_rate * (1 - generation / total_generations)
 
-def crossover(parents, no_offspring, no_crossovers):
-    p1, p2 = parents[0][2], parents[1][2]  # Assuming parents are tuples with the individual at index 2
+def parallel_crossover_mutation(parents, no_offspring, no_crossovers, mutation_rate, executor):
+    tasks = [executor.submit(single_crossover_mutation, parents, no_crossovers, mutation_rate) for _ in range(no_offspring)]
     offspring_population = []
-    for _ in range(no_offspring):
-        offspring = []
-        crossover_points = sorted(np.random.randint(1, len(p1)-1, no_crossovers-1).tolist())
-        crossover_points = [0] + crossover_points + [len(p1)]  # Ensure starting and ending points
-        for i in range(len(crossover_points)-1):
-            if i % 2 == 0:
-                offspring.extend(p1[crossover_points[i]:crossover_points[i+1]])
-            else:
-                offspring.extend(p2[crossover_points[i]:crossover_points[i+1]])
-        offspring_population.append(offspring)
+    for future in as_completed(tasks):
+        offspring_population.append(future.result())
     return offspring_population
 
-def mutate_offspring(offspring_population, mutation_rate): 
-    for offspring in offspring_population[2:]: # Skip the two best individuals.
-        for i in range(len(offspring)):
-            if np.random.rand() < mutation_rate:
-                offspring[i] = 0 if offspring[i] == 1 else 1
-    return offspring_population
+def single_crossover_mutation(parents, no_crossovers, mutation_rate):
+    p1, p2 = parents[0][2], parents[1][2]
+    offspring = []
+    crossover_points = sorted(rd.sample(range(1, len(p1)-1), no_crossovers-1))
+    crossover_points = [0] + crossover_points + [len(p1)]
+    for i in range(len(crossover_points)-1):
+        if i % 2 == 0:
+            offspring.extend(p1[crossover_points[i]:crossover_points[i+1]])
+        else:
+            offspring.extend(p2[crossover_points[i]:crossover_points[i+1]])
+    # Mutation
+    for i in range(len(offspring)):
+        if rd.random() < mutation_rate:
+            offspring[i] = 0 if offspring[i] == 1 else 1
+    return offspring
 
-def run_GA(executor, population, predictors, response_variables) : 
+def run_GA(executor, population, predictors, response_variables, no_generations, mutation_rate, no_offspring, no_crossovers):
     best_models = []
     no_improvement_count = 0
     best_score = np.inf  
-    early_stopping_generations = float(no_generations*0.9) # Stop if no improvements after 90% of the gens
+    early_stopping_generations = float(no_generations * 0.9)  # Stop if no improvements after 90% of the gens
+    
     for generation in range(no_generations):
         models = evaluate_fitness_parallel(executor, population, predictors, response_variables)
         sorted_models = rank_population(models)
@@ -178,30 +187,33 @@ def run_GA(executor, population, predictors, response_variables) :
         if no_improvement_count >= early_stopping_generations:
             print("Early stopping...")
             break
-        #print(len(sorted_models[0][6]))
-        #print(len(sorted_models[0][5]))
 
+        # Elitism: preserve the top N individuals
+        elitism_count = 2  # Number of individuals to pass directly to the next generation
+        elite_individuals = [model[2] for model in sorted_models[:elitism_count]]
+
+        # Adjust mutation rate dynamically
         dynamic_mutation_rate = adapt_mutation_rate(mutation_rate, generation, no_generations)
-        parents = tournament_selection(sorted_models)
-        offspring_population = crossover(parents, no_offspring, no_crossovers)
-        population = mutate_offspring(offspring_population, dynamic_mutation_rate)
-        
-        # Elitism is employed: the two best parents are passed to the offspring generation
-        elitism_count = 2  # Number of individuals to pass directly
-        population[:elitism_count] = [model[2] for model in sorted_models[:elitism_count]]
 
-        #print(sorted_models)
-        best_models.append(sorted_models[0])  # track the best model each generation
+        # Selection and generation of new offspring
+        parents = tournament_selection(sorted_models)  
+        offspring_population = parallel_crossover_mutation(parents, no_offspring - elitism_count, no_crossovers, dynamic_mutation_rate, executor)
 
+        # Merge elite individuals with offspring to form the new population
+        population = elite_individuals + offspring_population
+
+        best_models.append(sorted_models[0])  # Track the best model each generation
+        print(f"Generation {generation + 1}: Best score {best_score}")
 
     return population, best_models[0]
+
 
 def save_png(best_models):
     end_time = time.time()
     tot_time = end_time - start_time
     title = "GA Feature Selection Performance: " + str(tot_time)
     plt.figure(figsize=(19.2, 10.2))
-    mse = [model[0] for model in best_models]  # Extract MSE 
+    mse = [model[1] for model in best_models]  # Extract MSE 
 
     #print(mse)
     x = range(len(mse))
@@ -238,7 +250,7 @@ best_models  = []
 model_predictors = []
 
 for i in range(no_generations):
-    population, best_model_info = run_GA(executor, population, predictors, response_variables)
+    population, best_model_info = run_GA(executor, population, predictors, response_variables, no_generations, mutation_rate, no_offspring, no_crossovers)
     best_model = [best_model_info[0]]
     best_model.append(best_model_info[1])
     best_model.append(best_model_info[2])
@@ -254,7 +266,7 @@ save_png(best_models)
 
 
 # Open the file for writing
-with open("best_models.txt", "w") as file:
+with open("best_models_td0.9_co10.txt", "w") as file:
     # Iterate over each generation's best model data
     for gen_index, (individual_number, test_error, representation, coefficients, intercept) in enumerate(best_models):
             selected_features = ', '.join(df.columns[i] for i, bit in enumerate(representation) if bit == 1)
