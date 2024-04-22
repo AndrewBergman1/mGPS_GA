@@ -72,7 +72,7 @@ def extract_response_variables(df):
     return df[['latitude']]
 
 def initialize_population(predictors, init_pop_size) :
-    td = 0.9
+    td = 0.75
 
     population = []
 

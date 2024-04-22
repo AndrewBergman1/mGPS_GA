@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -t 60:00:00
+#SBATCH -t 2:00:00
 #SBATCH --mail-user=andrew.jg.bergman@gmail.com
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
@@ -13,4 +13,4 @@ module load Anaconda3/2024.02-1  # Adjust as per module available on your cluste
 source activate /home/andrewb/miniconda3/envs/GA_feature_selection
 
 # Run your Python script
-python /home/andrewb/GA_feature_selection/lasso.py 0.3 0.9 0.2 100 100 2 50 10 || echo "Script failed with exit code $?"
+python /home/andrewb/GA_feature_selection/lasso.py 0.3 0.9 0.05 100 100 2 200 10 || echo "Script failed with exit code $?"
