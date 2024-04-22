@@ -13,4 +13,4 @@ module load Anaconda3/2024.02-1  # Adjust as per module available on your cluste
 source activate /home/andrewb/miniconda3/envs/GA_feature_selection
 
 # Run your Python script
-python /home/andrewb/GA_feature_selection/long_GA.py 0.3 0.9 0.05 1000 1000 2 500 3 || echo "Script failed with exit code $?"
+python /home/andrewb/GA_feature_selection/long_GA.py 0.3 0.9 0.05 1000 1000 2 1000 5 || echo "Script failed with exit code $?"
