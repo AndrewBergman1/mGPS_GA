@@ -138,5 +138,5 @@ I have made adjustments to the prediction-script, it should now work properly. E
 
 ## 24/4 2024
 Good results from the GA. I've ran lasso.py 0.3 0.9 0.05 500 500 2 500 3 and the following results were yielded.
-![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/09042024.png)
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/220424.png)
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/220424.png)
