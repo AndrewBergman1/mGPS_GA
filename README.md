@@ -135,3 +135,6 @@ I have made adjustments to the prediction-script, it should now work properly. E
 ## 20/4 2024
 559415 : 3 crossover points, Td = 0.5
 561511 : 10 CO, Td = 0.9
+
+## 22/4 2024
+I have now downlaoded Leo's 200 gits and am running the GA on them. The results are much more promising so far. 
