@@ -12,7 +12,7 @@ from sklearn import preprocessing
 np.set_printoptions(threshold=np.inf)
 
 def find_best_model() : 
-    with open("best_models.txt", "r") as file :
+    with open("best_models_td0.9_co10.txt", "r") as file :
         best_gen = ""
         best_r2 = 9999999999
         best_predictors = []
@@ -86,10 +86,10 @@ def make_prediction(best_model, df):
 
     # Select the columns based on your model's feature importance or coefficients
 
-    selected_columns = [col for col in df.columns if col in best_model[2] if col not in ["uuid", "Unnamed: 0", "longitude", "latitude"]]
+    selected_columns = [col for col in df.columns if col in best_model[2] if col not in ["uuid", "longitude", "latitude"]]
     validation_data = df[selected_columns]
-    #print(len(best_model[2]))
-    #print(len(validation_data.columns))
+    #print(best_model[2])
+    #print(validation_data.columns)
     #sys.exit()
     # Initialize a new Linear Regression model
     model = LinearRegression()
@@ -100,8 +100,9 @@ def make_prediction(best_model, df):
     # Assuming best_model[3] is the list of coefficients and best_model[4] is the intercept
     # Make sure that the length of selected_columns matches the number of coefficients
        # Print shapes to debug
-    print("Validation data shape:", validation_data.shape)
-    print("Coefficients shape:", model.coef_.shape)
+    #print("Validation data shape:", validation_data.shape)
+    #print("Coefficients shape:", model.coef_.shape)
+    #sys.exit()
     if len(selected_columns) != len(best_model[3]):
         raise ValueError("The number of selected features does not match the number of coefficients.")
     
@@ -121,7 +122,7 @@ def extract_lat(validation_data):
 
 
 
-validation_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", validation_file="./validation_data")
+validation_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", validation_file="./validation_200.csv")
 df = import_coordinates(validation_df, meta_df)
 
 model = find_best_model()
