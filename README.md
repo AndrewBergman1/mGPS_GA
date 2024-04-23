@@ -169,3 +169,8 @@ The following scripts are currently utilized:
 - city_pred.py: Reconstructs the multi-logistic regression used by city_GA.py and validates it on the validation data. Currently the accuracy is 91.28% (Model Accuracy: 0.9128440366972477!!!).
 - long_GA.py (included in lat_batch.sh): A genetic algorithm that optimizes the features for predicting longitude. The script reads the "best_models_city" file and takes subsets of those predictors.
 - lat_GA.py (included in lat_batch.sh): The same GA as above, but for latitude.
+
+The following GA classification was ran: 
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/GA_Classification_Performance_230424.png)
+
+Upon testing it on validation data, the classification accuracy is 91.28%. This is higher than any classification achieved previously.
