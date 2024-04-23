@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -t 36:00:00
+#SBATCH -t 1:00:00
 #SBATCH --mail-user=andrew.jg.bergman@gmail.com
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
@@ -13,4 +13,4 @@ module load Anaconda3/2024.02-1  # Adjust as per module available on your cluste
 source activate /home/andrewb/miniconda3/envs/GA_feature_selection
 
 # Run your Python script
-python /home/andrewb/GA_feature_selection/long_GA.py 0.3 0.9 0.05 1000 1000 2 3000 5 || echo "Script failed with exit code $?"
+python /home/andrewb/GA_feature_selection/long_GA.py 0.3 0.9 0.1 1000 1000 2 100 5 || echo "Script failed with exit code $?"

@@ -160,4 +160,12 @@ The following results were attained:
 - Predictive performance latitude
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/lat_results_10402304.png?raw=true)
 
-The predictive performance is better for latitude, the reason for this i dont know. Perhaps inputing longitude and latitude as response variables in the same model would yield different results (but perhaps less accurate).
+The predictive performance is better for latitude, the reason for this i dont know. Perhaps inputing longitude and latitude as response variables in the same model would yield different results (but perhaps less accurate). I will also standardize the response- and predictor variables, which is appearently good practice when performing regressions. In parallell to experimenting with standardization, I'll make a version of the GA into a classification problem (classifying city). I will thereafter run the lat- and long-GAs.
+
+I have now constructed a GA to classify datapoints into cities. With those predictors I will attempt to predict coordinates. So far, the classification accuracy is seemingly higher than that of Yali's RFC.
+
+The following scripts are currently utilized: 
+- city_GA.py (included in city_batch.sh): A genetic algorithm that optimizes the features that are included in a multi-logistic regression to identify cities. 
+- city_pred.py: Reconstructs the multi-logistic regression used by city_GA.py and validates it on the validation data. Currently the accuracy is 91.28% (Model Accuracy: 0.9128440366972477!!!).
+- long_GA.py (included in lat_batch.sh): A genetic algorithm that optimizes the features for predicting longitude. The script reads the "best_models_city" file and takes subsets of those predictors.
+- lat_GA.py (included in lat_batch.sh): The same GA as above, but for latitude.

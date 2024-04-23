@@ -12,6 +12,7 @@
 
 
 # python3 single_core_test.py 0.3 0.9 0.05 20 20 2 2 3 TAKES 5 MINUTES PER GENERATION
+import re
 import math
 import pandas as pd
 import random as rd
@@ -42,7 +43,32 @@ np.set_printoptions(threshold=np.inf, suppress=True, linewidth=np.inf)
 
 #Sets the seed
 start_time = time.time()
+def parse_city_model(filename):
+    best_accuracy = float('-inf')
+    best_predictors = None
 
+    with open(filename, "r") as file:
+        accuracy = None  # Initialize outside to retain value across iterations
+        predictors = None
+
+        for line in file:
+            line = line.strip()
+            if line.startswith("R²:"):
+                matches = re.findall(r'R²:\s*(\d+\.\d+)', line)  # Adjust regex if needed
+                if matches:
+                    accuracy = float(matches[0])
+
+            if line.startswith("Selected Features:"):
+                cleaned_predictors = line.replace("Selected Features: ", "")
+                predictors = cleaned_predictors.split(", ")
+
+            if accuracy is not None and predictors is not None:
+                if accuracy > best_accuracy:
+                    best_accuracy = accuracy
+                    best_predictors = predictors
+                    print(f"New best accuracy: {best_accuracy} with predictors: {best_predictors}")
+
+        return best_predictors
 
 def load_data_file(abundance_file, metadata_file) :
     abundance_df = pd.read_csv(abundance_file, index_col=0)
@@ -232,11 +258,18 @@ no_generations = int(sys.argv[7])
 no_crossovers = int(sys.argv[8])
 
 executor = ProcessPoolExecutor(max_workers=24)
-
+city_features = parse_city_model("best_models_city")
 abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_200.csv")
 df = import_coordinates(abundance_df, meta_df)
-predictors = extract_predictors(df)
 response_variables = extract_response_variables(df)  
+
+# Scale the predictors
+scaler = StandardScaler()
+scaled_predictors = scaler.fit_transform(df[city_features]) #Exchange the predictors if city features doesnt work out.
+# Convert scaled array back to DataFrame (to maintain compatibility with existing code)
+scaled_predictors_df = pd.DataFrame(scaled_predictors, columns=city_features)
+# Replace the predictors DataFrame with the scaled one
+predictors = scaled_predictors_df  
 population =initialize_population(predictors, init_pop_size)
 
 best_models  = []
