@@ -147,3 +147,17 @@ Although the results are a lot better than what's previously been attained, the 
 - python /home/andrewb/GA_feature_selection/lat_GA.py 0.3 0.9 0.05 1000 1000 2 3000 5
 
 The following results were attained: 
+
+- GA Epochs longitude 
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/long_model_performance_220424.png?raw=true)
+
+- GA Epochs latitude
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/lat_model_performance_220424.png?raw=true)
+
+- Predictive performance longitude
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/long_results_10402304.png?raw=true)
+
+- Predictive performance latitude
+![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/lat_results_10402304.png?raw=true)
+
+The predictive performance is better for latitude, the reason for this i dont know. Perhaps inputing longitude and latitude as response variables in the same model would yield different results (but perhaps less accurate).
