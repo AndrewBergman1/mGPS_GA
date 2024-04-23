@@ -141,5 +141,9 @@ Good results from the GA. I've ran lasso.py 0.3 0.9 0.05 500 500 2 500 3 and the
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/GA_epochs/220424.png)
 ![Alt text](https://github.com/AndrewBergman1/mGPS_GA/blob/main/results/model_performance/220424.png)
 
-Although the results are a lot better than what's previously been attained, the outcome is still not good enough. longitude MSE = 1200, latitude MSE = 100. I will run a longer GA.
+Although the results are a lot better than what's previously been attained, the outcome is still not good enough. longitude MSE = 1200, latitude MSE = 100. I will run a longer GA:
 
+- python /home/andrewb/GA_feature_selection/long_GA.py 0.3 0.9 0.05 1000 1000 2 3000 5
+- python /home/andrewb/GA_feature_selection/lat_GA.py 0.3 0.9 0.05 1000 1000 2 3000 5
+
+The following results were attained: 
