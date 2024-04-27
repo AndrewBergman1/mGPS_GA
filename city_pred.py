@@ -36,42 +36,40 @@ def extract_response_variables(df):
 
 def parse_city_model(filename):
     best_accuracy = float('-inf')
-    best_predictors = None
-    try:
-        with open(filename, "r") as file:
-            accuracy = None
-            predictors = None
-            for line in file:
-                line = line.strip()
-                if line.startswith("R²:"):
-                    matches = re.findall(r'R²:\s*(\d+\.\d+)', line)
-                    if matches:
-                        accuracy = float(matches[0])
-                if line.startswith("Selected Features:"):
-                    cleaned_predictors = line.replace("Selected Features: ", "")
-                    predictors = cleaned_predictors.split(", ")
-                if accuracy is not None and predictors is not None and accuracy > best_accuracy:
-                    best_accuracy = accuracy
-                    best_predictors = predictors
-    except Exception as e:
-        print(f"Error reading or processing file: {e}")
-    return best_predictors
+    best_predictors = []
+    with open(filename, "r") as file:
+        accuracy = None
+        predictors = []
+        for line in file:
+            line = line.strip()
+            if line.startswith("Best Accuracy"):
+                matches = re.findall(r'[-+]?[0-9]*\.?[0-9]+', line)
+                if matches:
+                    accuracy = float(matches[0])
+                    print(f"Parsed accuracy: {accuracy}")
+            else:
+                predictor = line.strip()
+                if predictor:  # Ensure non-empty lines are considered
+                    predictors.append(predictor)
+
+    return predictors
 
 # Example usage
-meta_data, validation_data = load_data_file("./complete_metadata.csv", "./validation_data")
+meta_data, validation_data = load_data_file("./complete_metadata.csv", "./testing_data.csv")
 df = import_coordinates(meta_data, validation_data)
-predictors = parse_city_model("best_models_city")
+predictors = parse_city_model("best_predictors.txt")
 response_variable = "city"
 
-# Scale the predictors
-scaler = StandardScaler()
-df[predictors] = scaler.fit_transform(df[predictors])
+# Check if all predictors are present in the DataFrame
+if all(item in df.columns for item in predictors) and response_variable in df.columns:
+    # Scale the predictors
+    scaler = StandardScaler()
+    df[predictors] = scaler.fit_transform(df[predictors])
 
-# Fit model
-if predictors and response_variable in df:
+    # Fit model
     y = df[response_variable]
     X = df[predictors]
     results = fit_model(X, y)
-    print(f"Model Accuracy: {results[0]}, Coefficients: {results[1]}, Intercept: {results[2]}")
+    print(f"Model Accuracy: {results[0]}")
 else:
-    print("Predictors or response variables not properly defined.")
+    print("Predictors or response variable not properly defined or missing from DataFrame.")

@@ -70,7 +70,7 @@ def drop_columns(corr_matrix) :
     return df_dropped
 
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./metasub_taxa_abundance.csv")
+abundance_df, meta_df = load_data_file(metadata_file="../complete_metadata.csv", abundance_file="../training_data.csv")
 df = import_coordinates(abundance_df, meta_df)
 
 new_df = df.iloc[:, 1:-2]

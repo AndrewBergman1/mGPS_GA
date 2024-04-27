@@ -1,0 +1,9 @@
+/home/andrewb/GA_feature_selection/scripts/preprocessing.py:20: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  coordinates['uuid'] = coordinates['uuid'].astype(str)
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/statsmodels/regression/linear_model.py:1781: RuntimeWarning: invalid value encountered in scalar divide
+  return 1 - self.ssr/self.centered_tss
+slurmstepd: error: *** JOB 596368 ON cn039 CANCELLED AT 2024-04-27T13:18:48 DUE TO TIME LIMIT ***

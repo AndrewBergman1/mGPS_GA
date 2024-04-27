@@ -102,6 +102,7 @@ def initialize_population(predictors, init_pop_size) :
     return population
 
 
+
 def evaluate_batch_fitness(batch):
     results = []
     for individual_index, individual, predictors, response_variables in batch:
@@ -113,18 +114,18 @@ def evaluate_batch_fitness(batch):
             fitness = float('-inf')  # Adjust based on GA fitness direction
             results.append((individual_index, fitness, individual, [], [0]))
         else:
-            X_train, X_test, y_train, y_test = train_test_split(selected_predictor_data, response_variables, test_size=0.2)
             model = LogisticRegression(max_iter=1000, multi_class='multinomial', solver='lbfgs')
-            model.fit(X_train, y_train.values.ravel())
-            predictions = model.predict(X_test)
-            accuracy = np.mean(predictions == y_test.values.ravel())
-            fitness = accuracy   # Adjust based on GA fitness direction
+            # Perform 5-fold cross-validation
+            accuracies = cross_val_score(model, selected_predictor_data, response_variables.values.ravel(), cv=5, scoring='accuracy', n_jobs=1)
+            mean_accuracy = np.mean(accuracies)
+            fitness = mean_accuracy  # Adjust based on GA fitness direction
+            model.fit(selected_predictor_data, response_variables.values.ravel())  # Fit model on entire dataset to get coefficients
             results.append((individual_index, fitness, individual, model.coef_, model.intercept_))
     return results
 
 def evaluate_fitness_parallel(executor, population, predictors, response_variables):
     args = [(index, individual, predictors, response_variables) for index, individual in enumerate(population)]
-    batches = [args[i:i + 20] for i in range(0, len(args), 20)]
+    batches = [args[i:i + 4] for i in range(0, len(args), 4)]
     future_to_batch = {executor.submit(evaluate_batch_fitness, batch): batch for batch in batches}
     results = []
     for future in as_completed(future_to_batch):
@@ -230,73 +231,71 @@ def save_png(best_models):
 
 #df.to_csv('df.csv', index=False)
 
+if __name__ == "__main__" : 
+    crossover_min = float(sys.argv[1])
+    crossover_max = float(sys.argv[2])
+    mutation_rate = float(sys.argv[3])
+    no_offspring = int(sys.argv[4])
+    init_pop_size = int(sys.argv[5])
+    reproductive_units = int(sys.argv[6]) - 1
+    no_generations = int(sys.argv[7])
+    no_crossovers = int(sys.argv[8])
 
-crossover_min = float(sys.argv[1])
-crossover_max = float(sys.argv[2])
-mutation_rate = float(sys.argv[3])
-no_offspring = int(sys.argv[4])
-init_pop_size = int(sys.argv[5])
-reproductive_units = int(sys.argv[6]) - 1
-no_generations = int(sys.argv[7])
-no_crossovers = int(sys.argv[8])
+    executor = ProcessPoolExecutor(max_workers=48)
 
-executor = ProcessPoolExecutor(max_workers=24)
+    abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data.csv")
+    df = import_coordinates(abundance_df, meta_df)
+    predictors = extract_predictors(df)
+    response_variables, city_mapping = extract_response_variables(df)
 
-abundance_df, meta_df = load_data_file(metadata_file="./complete_metadata.csv", abundance_file="./training_data")
+    # Scale the predictors
+    scaler = StandardScaler()
+    scaled_predictors = scaler.fit_transform(predictors)
+    # Convert scaled array back to DataFrame (to maintain compatibility with existing code)
+    scaled_predictors_df = pd.DataFrame(scaled_predictors, columns=predictors.columns)
+    # Replace the predictors DataFrame with the scaled one
+    predictors = scaled_predictors_df
 
-df = import_coordinates(abundance_df, meta_df)
+    population =initialize_population(predictors, init_pop_size)
 
-predictors = extract_predictors(df)
-response_variables, city_mapping = extract_response_variables(df)
+    best_models  = []
+    model_predictors = []
 
-# Scale the predictors
-scaler = StandardScaler()
-scaled_predictors = scaler.fit_transform(predictors)
-# Convert scaled array back to DataFrame (to maintain compatibility with existing code)
-scaled_predictors_df = pd.DataFrame(scaled_predictors, columns=predictors.columns)
-# Replace the predictors DataFrame with the scaled one
-predictors = scaled_predictors_df
-
-population =initialize_population(predictors, init_pop_size)
-
-best_models  = []
-model_predictors = []
-
-for i in range(no_generations):
-    population, best_model_info = run_GA(executor, population, predictors, response_variables, no_generations, mutation_rate, no_offspring, no_crossovers)
-    best_model = [best_model_info[0]]
-    best_model.append(best_model_info[1])
-    best_model.append(best_model_info[2])
-    best_model.append(best_model_info[3])
-    best_model.append(best_model_info[4])
+    for i in range(no_generations):
+        population, best_model_info = run_GA(executor, population, predictors, response_variables, no_generations, mutation_rate, no_offspring, no_crossovers)
+        best_model = [best_model_info[0]]
+        best_model.append(best_model_info[1])
+        best_model.append(best_model_info[2])
+        best_model.append(best_model_info[3])
+        best_model.append(best_model_info[4])
 
 
-    best_models.append(best_model)
-    print("Generation:", (i + 1))
-    print(best_model)
+        best_models.append(best_model)
+        print("Generation:", (i + 1))
+        print(best_model)
 
-save_png(best_models)
+    save_png(best_models)
 
 
-with open("best_models_city", "w") as file:
-        for gen_index, (individual_number, test_error, representation, coefficients, intercepts) in enumerate(best_models):
-            selected_features = [predictors.columns[i] for i, bit in enumerate(representation) if bit == 1]
-            data_line = f"Generation: {gen_index + 1}\n" \
-                        f"R²: {test_error}\n" \
-                        f"Selected Features: {', '.join(selected_features)}\n" \
-                        f"Coefficients and Cities:\n"
+    with open("best_models_city", "w") as file:
+            for gen_index, (individual_number, test_error, representation, coefficients, intercepts) in enumerate(best_models):
+                selected_features = [predictors.columns[i] for i, bit in enumerate(representation) if bit == 1]
+                data_line = f"Generation: {gen_index + 1}\n" \
+                            f"R²: {test_error}\n" \
+                            f"Selected Features: {', '.join(selected_features)}\n" \
+                            f"Coefficients and Cities:\n"
 
-            # Handling coefficients (2D array) and matching each row to a city
-            for i, city_coefs in enumerate(coefficients):
-                city_name = city_mapping.get(i, "Unknown City")
-                coefs_by_feature = ', '.join(f"{feat}: {coef:.4f}" for feat, coef in zip(selected_features, city_coefs))
-                data_line += f"  {city_name} - Coefficients: {coefs_by_feature}\n"
-            
-            # Handling intercepts and matching each to a city
-            data_line += "Intercepts and Cities:\n"
-            for i, intercept in enumerate(intercepts):
-                city_name = city_mapping.get(i, "Unknown City")
-                data_line += f"  {city_name} - Intercept: {intercept:.4f}\n"
-            
-            data_line += "\n"
-            file.write(data_line)
+                # Handling coefficients (2D array) and matching each row to a city
+                for i, city_coefs in enumerate(coefficients):
+                    city_name = city_mapping.get(i, "Unknown City")
+                    coefs_by_feature = ', '.join(f"{feat}: {coef:.4f}" for feat, coef in zip(selected_features, city_coefs))
+                    data_line += f"  {city_name} - Coefficients: {coefs_by_feature}\n"
+                
+                # Handling intercepts and matching each to a city
+                data_line += "Intercepts and Cities:\n"
+                for i, intercept in enumerate(intercepts):
+                    city_name = city_mapping.get(i, "Unknown City")
+                    data_line += f"  {city_name} - Intercept: {intercept:.4f}\n"
+                
+                data_line += "\n"
+                file.write(data_line)
