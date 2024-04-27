@@ -1,0 +1,2 @@
+Cities with less than 5 observations: ['newcastle', 'belfast', 'eden', 'islington', 'tsuruoka', 'jaywick', 'neg_control', 'sao paulo', 'fukuoka', 'kensington', 'bradford', 'pos_control', 'bristol', 'st_louis', 'cairngorm', 'other']
+slurmstepd: error: *** JOB 596590 ON cn066 CANCELLED AT 2024-04-27T15:45:05 ***

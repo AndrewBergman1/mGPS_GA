@@ -1,184 +1,367 @@
-Best Accuracy: 0.6191740412979352
+Best Accuracy: 0.6528023598820059
 Acetomicrobium mobile
-Actinoalloteichus hymeniacidonis
-Actinobacillus suis
-Actinomyces gaoshouyii
-Actinosynnema mirum
-Advenella mimigardefordensis
-Aerococcus urinaeequi
-Aeromonas sp. CU5
-Alcaligenes faecalis
-Alicycliphilus denitrificans
-Alteromonas macleodii
-Anaerolineaceae bacterium oral taxon 439
-Archangium gephyra
+Achromobacter denitrificans
+Achromobacter insolitus
+Acidothermus cellulolyticus
+Acidovorax sp. KKS102
+Acidovorax sp. NA2
+Acinetobacter haemolyticus
+Acinetobacter sp. LoGeW2-3
+Acinetobacter sp. TGL-Y2
+Actinobacteria bacterium IMCC19121
+Actinomyces radicidentis
+Aerococcus urinae
+Aeromonas phage PX29
+Aeromonas salmonicida
+Aeromonas schubertii
+Aeromonas sp. ASNIH5
+Alphapapillomavirus 14
+Altererythrobacter atlanticus
+Altererythrobacter epoxidivorans
+Alteromonas sp. MB-3u-76
+Alteromonas sp. Mac1
+Amycolatopsis japonica
+Anaeromyxobacter sp. K
+Arachidicoccus sp. BS20
+Arthrobacter sp. IHBB 11108
+Arthrobacter sp. LS16
+Aster yellows witches'-broom phytoplasma
 Aurantimicrobium minutum
-Azoarcus sp. BH72
-Bacteroides caecimuris
-Bathycoccus sp. RCC1105 virus BpV
-Betapapillomavirus 4
-Bifidobacterium breve
-Bifidobacterium choerinum
-Bifidobacterium indicum
-Blattodean ambidensovirus 1
-Bordetella sp. H567
-Bosea sp. AS-1
-Bosea vaviloviae
-Bradyrhizobium sp. ORS 278
-Brucella vulpis
-Campylobacter hominis
-Candidatus Babela massiliensis
-Candidatus Gullanella endobia
-Candidatus Koribacter versatilis
-Candidatus Methylopumilus turicensis
-Candidatus Nasuia deltocephalinicola
-Canis familiaris polyomavirus 1
-Capnocytophaga sp. ChDC OS43
-Chelatococcus daeguensis
-Chlamydia pneumoniae
-Chlorobium limicola
-Chloroflexus aggregans
-Citrobacter amalonaticus
-Citrobacter phage CR44b
-Citrobacter phage SH4
-Citrobacter rodentium
-Citrobacter sp. FDAARGOS_156
-Clostridium kluyveri
-Comamonas testosteroni
+Avian endogenous retrovirus EAV-HP
+Azoarcus sp. KH32C
+Bacillus clausii
+Bacillus phage Moonbeam
+Bacillus siamensis
+Bacillus sp. WP8
+Bacillus sp. X1(2014)
+Bacillus subtilis
+Bacillus virus Grass
+Barnesiella viscericola
+Betapapillomavirus 3
+Bifidobacterium adolescentis
+Bifidobacterium dentium
+Bifidobacterium longum
+Bordetella genomosp. 8
+Bosea sp. RAC05
+Bovine associated gemykrogvirus 1
+Brachyspira intermedia
+Bradyrhizobium oligotrophicum
+Brevundimonas sp. LM2
+Brevundimonas subvibrioides
+Brochothrix phage BL3
+Brucella pinnipedialis
+Burkholderia stagnalis
+Campylobacter hyointestinalis
+Campylobacter ureolyticus
+Candidatus Amoebophilus asiaticus
+Candidatus Nucleicultrix amoebiphila
+Castellaniella defragrans
+Caulobacteraceae bacterium OTSz_A_272
+Celeribacter indicus
+Cellvibrio sp. PSBB023
+Chipapillomavirus 3
+Chloracidobacterium thermophilum
+Chryseobacterium gallinarum
+Chryseobacterium taklimakanense
+Chrysodeixis chalcites nucleopolyhedrovirus
+Citrobacter virus Moon
+Clavibacter nebraskensis
+Clostridioides difficile
+Clostridium beijerinckii
+Clostridium cellulovorans
+Clostridium formicaceticum
+Corynebacterium ammoniagenes
+Corynebacterium crudilactis
+Corynebacterium cystitidis
 Corynebacterium deserti
-Corynebacterium glaucum
-Corynebacterium testudinoris
-Corynebacterium urealyticum
-Cronobacter turicensis
-Cupriavidus sp. USMAA2-4
+Corynebacterium diphtheriae
+Corynebacterium falsenii
+Corynebacterium sp. ATCC 6931
+Corynebacterium stationis
+Cotesia congregata bracovirus
+Cronobacter phage Dev2
+Cronobacter virus CR9
+Cryobacterium arcticum
+Curtobacterium sp. BH-2-1-1
 Cyanothece sp. ATCC 51142
-Deinococcus actinosclerus
-Deinococcus deserti
-Deinococcus maricopensis
-Deinococcus peraridilitoris
-Deinococcus swuensis
-Desulfovibrio vulgaris
-Desulfurispirillum indicum
-Dickeya solani
-Dokdonia sp. 4H-3-7-5
-Ensifer adhaerens
-Enterobacter sp. E20
-Enterobacter sp. HK169
-Erwinia amylovora
-Erythrobacter atlanticus
-Escherichia marmotae
-Escherichia phage HK639
-Escherichia phage slur16
+Cyclobacterium marinum
+Cycloclasticus sp. PY97N
+Defluviimonas alba
+Deinococcus puniceus
+Desulfobacca acetoxidans
+Desulfotomaculum ferrireducens
+Desulfovibrio magneticus
+Desulfovibrio piger
+Dokdonia donghaensis
+Dokdonia sp. MED134
+Edwardsiella sp. EA181011
+Eikenella corrodens
+Elizabethkingia genomosp. 3
+Enterobacter cancerogenus
+Enterobacter phage phiEap-2
+Enterobacter sp. R4-368
+Enterobacteriaceae bacterium strain FGI 57
+Erwinia phage vB_EamM_Caitlin
+Erwinia sp. Ejp617
+Erythrobacter gangjinensis
+Escherichia phage ECML-117
+Escherichia phage Lw1
+Escherichia virus 172-1
+Escherichia virus ACGM12
+Escherichia virus AYO145A
+Escherichia virus FFH2
 Escherichia virus IME11
-Escherichia virus RB69
-Glaciecola sp. 4H-3-7+YE-5
-Gluconobacter oxydans
-Gordonia phage BaxterFox
-Gordonia phage GRU1
+Escherichia virus JES2013
+Escherichia virus JH2
+Escherichia virus K1H
+Escherichia virus K30
+Escherichia virus V5
+Exiguobacterium antarcticum
+Fermentimonas caenicola
+Fictibacillus arsenicus
+Flavobacteriaceae bacterium 3519-10
+Francisella philomiragia
+Francisella sp. MA067296
+Gallid alphaherpesvirus 2
+Geobacillus thermocatenulatus
+Geobacillus thermodenitrificans
+Geobacter bemidjiensis
+Geodermatophilus obscurus
+Gilliamella apicola
+Glaesserella parasuis
+Glutamicibacter arilaitensis
+Gordonia phage Bowser
+Gordonia phage GAL1
+Gordonia sp. KTR9
+Gordonia virus Kvothe
 Granulibacter bethesdensis
-Granulicella tundricola
-Halobacteriovorax marinus
-Halomonas beimenensis
-Halorhodospira halophila
-Helicobacter cinaedi
-Hirschia baltica
-Human betaherpesvirus 5
-Human polyomavirus 6
-Hymenobacter sp. DG25B
-Hymenobacter sp. PAMC 26628
-Immundisolibacter cernigliae
-Kangiella koreensis
-Kosakonia cowanii
-Kurthia sp. 11kri321
-Labrenzia aggregata
-Lactobacillus acidipiscis
-Lactobacillus delbrueckii
-Lactobacillus helveticus
-Lactococcus phage 63301
-Lactococcus phage D4412
-Lactococcus phage phi7
+Haemophilus virus HP1
+Hafnia alvei
+Haliscomenobacter hydrossis
+Halodesulfurarchaeum formicicum
+Halomonas sp. 1513
+Haloquadratum walsbyi
+Helicobacter typhlonius
+Herbinix luporum
+Histophilus somni
+Hydrogenovibrio crunogenus
+Hyphomicrobium nitrativorans
+Hyphomicrobium sp. MC1
+Intestinimonas butyriciproducens
+Janthinobacterium sp. B9-8
+Kangiella geojedonensis
+Ketobacter alkanivorans
+Kibdelosporangium phytohabitans
+Klebsiella phage JD001
+Kluyveromyces marxianus
+Laceyella sp. FBKL4.010
+Lactobacillus amylophilus
+Lactobacillus amylovorus
+Lactobacillus curvatus
+Lactobacillus gallinarum
+Lactobacillus heilongjiangensis
+Lactobacillus parabuchneri
+Lactobacillus paraplantarum
+Lactobacillus pentosus
+Lactobacillus phage Lc-Nu
+Lactobacillus phage Sha1
+Lactobacillus phage phiJB
+Lactobacillus phage phig1e
+Lactobacillus virus Ld17
+Lactococcus lactis
+Lactococcus phage Tuc2009
 Lactococcus phage ul36
-Legionella waltersii
+Lacunisphaera limnophila
+Lelliottia sp. PFL01
 Leptolyngbya sp. NIES-3755
 Leptothrix cholodnii
-Leuconostoc carnosum
-Leuconostoc phage 1-A4
-Magnetospirillum magneticum
-Marinobacterium aestuarii
+Leptotrichia buccalis
+Leuconostoc garlicum
+Macrococcus caseolyticus
+Mahella australiensis
+Mannheimia sp. USDA-ARS-USMARC-1261
 Marinomonas mediterranea
-Methanobrevibacter olleyae
+Melittangium boletus
+Mesorhizobium ciceri
+Mesotoga prima
 Methanobrevibacter sp. YE315
-Methylacidiphilum fumariolicum
-Methylophilus sp. TWE2
-Micromonas pusilla virus 12T
-Mycobacterium chelonae
-Mycobacterium phage Jolie2
-Mycobacterium sp. WY10
-Myxococcus stipitatus
+Methanococcus voltae
+Methanosaeta harundinacea
+Methanothermobacter marburgensis
+Methanothrix soehngenii
+Methylobacterium radiotolerans
+Methylocystis bryophila
+Methylophaga nitratireducenticrescens
+Methylovorus glucosotrophus
+Microbacterium sp. BH-3-3-3
+Moraxella osloensis
+Mucilaginibacter sp. BJC16-A31
+Mucilaginibacter sp. PAMC 26640
+Mycobacterium dioxanotrophicus
+Mycobacterium phage MOOREtheMARYer
+Mycobacterium rhodesiae
+Mycobacterium shigaense
+Mycobacterium sinense
+Mycobacterium sp. QIA-37
+Mycoplasma arginini
+Mycoplasma pulmonis
+Myroides sp. ZB35
 Natrialba magadii
-Niabella soli
-Nitrobacter hamburgensis
-Nocardioides sp. JS614
+Natrinema sp. J7-2
+Natronomonas pharaonis
+Neisseria weaveri
+Neorhizobium galegae
+Nitrosococcus halophilus
+Nitrosococcus oceani
+Nitrosomonas communis
+Nitrosomonas sp. AL212
+Nitrosospira briensis
+Nitrospira defluvii
+Nocardia brasiliensis
+Nocardiopsis dassonvillei
+Nonlabens sediminis
+Nostoc sp. PCC 7107
 Nostocales cyanobacterium HT-58-2
-Oceanisphaera profunda
-Ovine mastadenovirus A
+Octadecabacter temperatus
+Olsenella sp. Marseille-P2300
+Olsenella sp. oral taxon 807
+Paenibacillus ihbetae
+Paenibacillus odorifer
+Paenibacillus sp. FSL H7-0357
 Paenibacillus sp. FSL R7-0273
-Pandoraea pnomenusa
-Pandoraea sputorum
-Pectobacterium parmentieri
+Paenibacillus sp. IHBB 10380
+Pandoraea oxalativorans
+Pandoravirus salinus
+Pantoea agglomerans
+Paraburkholderia sprentiae
+Paracoccus aminovorans
+Pediococcus pentosaceus
 Pelagibacterium halotolerans
-Porcine associated gemycircularvirus 1
-Prauserella marina
-Prevotella dentalis
-Prevotella ruminicola
-Propionibacterium phage PHL010M04
-Propionibacterium phage PHL199
-Propionibacterium phage PHL301
-Propionibacterium virus P101A
-Propionibacterium virus P104A
-Propionibacterium virus P91
-Propionibacterium virus Stormborn
-Pseudomonas mendocina
-Pseudomonas oryzihabitans
-Pseudomonas phage PPpW-4
-Pseudomonas phage PS-1
-Pseudomonas poae
-Pseudomonas sp. Lz4W
-Pseudomonas virus Ab26
-Psychrobacter sp. P11G5
-Rathayibacter toxicus
-Rhodococcus ruber
-Rhodococcus sp. B7740
+Phaeobacter porticola
+Photorhabdus luminescens
+Photorhabdus temperata
+Phyllobacterium sp. Tri-48
+Pigeon adenovirus 2
+Pithovirus sibericum
+Planococcus plakortidis
+Planococcus sp. MB-3u-03
+Polaribacter sp. BM10
+Prevotella intermedia
+Prevotella melaninogenica
+Prochlorococcus phage P-RSM4
+Prochlorococcus phage P-SSM7
+Propionibacterium phage Moyashi
+Propionibacterium phage PHL025
+Propionibacterium virus PA6
+Propionibacterium virus Pacnes201215
+Prosthecochloris sp. HL-130-GSB
+Proteus vulgaris
+Pseudoalteromonas arctica
+Pseudoalteromonas phage H101
+Pseudoalteromonas phage RIO-1
+Pseudoalteromonas rubra
+Pseudoalteromonas sp. 13-15
+Pseudoalteromonas spongiae
+Pseudoalteromonas translucida
+Pseudomonas cichorii
+Pseudomonas mosselii
+Pseudomonas phage PaBG
+Pseudomonas phage YMC11/02/R656
+Pseudomonas phage vB_PaeP_MAG4
+Pseudomonas virus LKA1
+Pseudomonas virus PaMx11
+Pseudomonas virus phiKZ
+Psychrobacter sp. G
+Psychrobacter sp. P2G3
+Rhizorhabdus dicambivorans
+Rhodoferax antarcticus
+Rhodothermus phage RM378
+Rothia mucilaginosa
+Rubrobacter xylanophilus
 Rufibacter sp. DG15C
-Saccharomyces cerevisiae
-Salmonella virus 118970sal2
-Shewanella woodyi
+Rufibacter tibetensis
+Ruminococcaceae bacterium CPB6
+Salmonella enterica
+Salmonella virus LSPA1
+Salmonella virus SE1
+Salmonella virus SE2
+Sebaldella termitidis
+Seonamhaeicola sp. S2-3
+Serratia fonticola
+Serratia liquefaciens
+Shewanella denitrificans
+Shewanella loihica
+Shewanella violacea
+Shigella virus Sb1
+Shigella virus SfMu
 Slackia heliotrinireducens
-Sodalis phage phiSG1
+Snodgrassella alvi
+Sorangium cellulosum
+Sphaerochaeta globosa
+Sphingobacterium mizutaii
+Sphingobacterium sp. 21
+Sphingobium sp. MI1205
 Sphingobium sp. SYK-6
 Sphingomonas panacis
-Sphingomonas sp. LK11
-Sphingopyxis fribergensis
-Spiribacter curvatus
-Spodoptera frugiperda granulovirus
-Staphylococcus capitis
+Sphingomonas sp. Cra20
+Sphingopyxis granuli
+Sphingopyxis sp. 113P3
+Spiroplasma kunkelii
+Sporosarcina psychrophila
+Sporosarcina sp. P37
+Staphylococcus aureus
 Staphylococcus equorum
-Staphylococcus hyicus
-Staphylococcus pasteuri
-Staphylococcus stepanovicii
-Staphylococcus virus SEP9
-Streptococcus infantarius
-Streptococcus intermedius
-Streptococcus oralis
+Staphylococcus lugdunensis
+Staphylococcus lutrae
+Staphylococcus phage B236
+Staphylococcus phage IME-SA4
+Staphylococcus schleiferi
+Staphylococcus simiae
+Staphylococcus succinus
+Staphylococcus virus PH15
+Staphylococcus virus SA12
+Stenotrophomonas nitritireducens
+Stenotrophomonas phage Smp131
+Steroidobacter denitrificans
+Streptococcus phage P9
+Streptococcus phage YMC-2011
 Streptococcus phage phiARI0131-1
-Streptomyces glaucescens
-Streptomyces lividans
-Streptomyces reticuli
-Streptomyces sp. M56
-Streptomyces xinghaiensis
-Synechococcus sp. NIES-970
+Streptococcus virus 7201
+Streptococcus virus Sfi19
+Streptomyces formicae
+Streptomyces lavendulae
+Streptomyces pactum
+Streptomyces scabiei
+Streptomyces sp. 769
+Suid betaherpesvirus 2
+Sulfuricaulis limicola
+Sulfurospirillum sp. SL2-1
+Synechococcus phage ACG-2014d
 Synechococcus sp. PCC 7117
-Thauera sp. MZ1T
-Variovorax sp. PAMC 28711
-Weissella ceti
-[Clostridium] cellulosi
+Synechococcus sp. WH 7803
+Synechocystis sp. PCC 6803
+Teredinibacter turnerae
+Tessaracoccus flavus
+Thalassotalea crassostreae
+Theileria orientalis
+Thioalkalivibrio versutus
+Thiolapillus brandeum
+Thiomicrospira aerophila
+Thiomicrospira cyclica
+Trichoplusia ni single nucleopolyhedrovirus
+Trichormus azollae
+Variovorax boronicumulans
+Veillonella parvula
+Verrucosispora maris
+Vibrio phage VBP32
+Virgibacillus halodenitrificans
+Virgibacillus pantothenticus
+Vitreoscilla filiformis
+Xanthobacter autotrophicus
+Xanthomonas perforans
+Zobellella denitrificans
+[Bacillus] selenitireducens
+[Clostridium] saccharolyticum
+[Polyangium] brachysporum
+cyanobacterium endosymbiont of Epithemia turgida
+endosymbiont of Acanthamoeba sp. UWC8

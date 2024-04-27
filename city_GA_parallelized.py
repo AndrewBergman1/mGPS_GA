@@ -132,11 +132,11 @@ def run_genetic_algorithm(executor, predictors, response_variables, population_s
 
         # Update the population with the selected top 10% individuals
         population = selected_individuals
-                
-        current_best_fitness, best_individual = fitness_and_individuals[0]
-        if current_best_fitness > best_fitness:
-            best_fitness = current_best_fitness
-            best_model = best_individual
+                    
+    current_best_fitness, best_individual = fitness_and_individuals[sorted_indices[0]]
+    if current_best_fitness > best_fitness:
+        best_fitness = current_best_fitness
+        best_model = best_individual
         
         best_fitness_history.append(current_best_fitness)
 
@@ -147,11 +147,14 @@ def run_genetic_algorithm(executor, predictors, response_variables, population_s
 
 
 def save_best_predictors(best_model, predictors, best_fitness, filename="best_predictors.txt"):
-    selected_features = predictors.columns[best_model == 1].tolist()
-    with open(filename, "w") as file:
-        file.write(f"Best Accuracy: {best_fitness}\n")  # Write best fitness at the top
-        file.write("\n".join(selected_features))
-    print(f"Best predictors and accuracy saved to {filename}")
+    try:
+        selected_features = predictors.columns[best_model == 1].tolist()
+        with open(filename, "w") as file:
+            file.write(f"Best Accuracy: {best_fitness}\n")  # Write best fitness at the top
+            file.write("\n".join(selected_features))
+        print(f"Best predictors and accuracy saved to {filename}")
+    except Exception as e:
+        print(f"Error in saving predictors: {e}")
 
 def plot_fitness_history(best_fitness_history):
     plt.plot(best_fitness_history, marker='o', linestyle='-', color='b')
