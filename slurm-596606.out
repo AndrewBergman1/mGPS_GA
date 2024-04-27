@@ -1,0 +1,216 @@
+Cities with less than 5 observations: ['newcastle', 'belfast', 'eden', 'islington', 'tsuruoka', 'jaywick', 'neg_control', 'sao paulo', 'fukuoka', 'kensington', 'bradford', 'pos_control', 'bristol', 'st_louis', 'cairngorm', 'other']
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 2 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 3 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(
+Generation 1 completed with best fitness: 0.6539823008849558
+Generation 2 completed with best fitness: 0.7014749262536872
+Generation 3 completed with best fitness: 0.6536873156342182
+Generation 4 completed with best fitness: 0.7014749262536872
+Generation 5 completed with best fitness: 0.6536873156342183
+Generation 6 completed with best fitness: 0.7011799410029498
+Generation 7 completed with best fitness: 0.6539823008849558
+Generation 8 completed with best fitness: 0.7014749262536872
+Generation 9 completed with best fitness: 0.6539823008849558
+Generation 10 completed with best fitness: 0.7011799410029498
+Best predictors and accuracy saved to best_predictors.txt
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  warnings.warn(

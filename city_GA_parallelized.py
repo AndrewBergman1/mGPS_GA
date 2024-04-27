@@ -113,6 +113,7 @@ def run_genetic_algorithm(executor, predictors, response_variables, population_s
     
     for generation in range(num_generations):
         fitness_and_individuals = evaluate_population_fitness(population, predictors, response_variables, executor)
+        
         if not fitness_and_individuals:
             print(f"No valid fitness results in generation {generation+1}, skipping to next generation.")
             population = generate_offspring(population, mutation_rate, no_crossovers, executor)
@@ -123,25 +124,26 @@ def run_genetic_algorithm(executor, predictors, response_variables, population_s
 
         # Get indices of sorted fitness scores in descending order
         sorted_indices = np.argsort(fitness_scores)[::-1]
+        current_best_fitness = fitness_scores[sorted_indices[0]]
+        best_individual = individuals[sorted_indices[0]]
 
-        # Determine the cutoff for the top 10%
-        top_10_percent_index = max(1, len(fitness_scores) // 10)
-
-        # Use indices to select the top 10% of individuals
-        selected_individuals = [individuals[i] for i in sorted_indices[:top_10_percent_index]]
-
-        # Update the population with the selected top 10% individuals
-        population = selected_individuals
-                    
-    current_best_fitness, best_individual = fitness_and_individuals[sorted_indices[0]]
-    if current_best_fitness > best_fitness:
-        best_fitness = current_best_fitness
-        best_model = best_individual
+        # Print current best fitness
+        print(f"Generation {generation + 1} completed with best fitness: {current_best_fitness}")
         
-    best_fitness_history.append(current_best_fitness)
+        # Check if the current best fitness is the highest so far and update best model and fitness
+        if current_best_fitness > best_fitness:
+            best_fitness = current_best_fitness
+            best_model = best_individual
 
-    population = generate_offspring(population, mutation_rate, no_crossovers, executor)
-    print(f"Generation {generation + 1} completed with best fitness: {current_best_fitness}")
+        best_fitness_history.append(current_best_fitness)
+
+        # Select top 10% of individuals for next generation
+        top_10_percent_index = max(1, len(fitness_scores) // 10)
+        selected_individuals = [individuals[i] for i in sorted_indices[:top_10_percent_index]]
+        population = selected_individuals
+
+        # Generate offspring for the next generation
+        population = generate_offspring(population, mutation_rate, no_crossovers, executor)
 
     return population, best_model, best_fitness_history
 
@@ -168,7 +170,7 @@ def plot_fitness_history(best_fitness_history):
 if __name__ == "__main__":
     predictors_df, predictors, response_variables = load_and_preprocess_data("complete_metadata.csv", "training_data.csv")
     with ProcessPoolExecutor(max_workers=32) as executor:
-        final_population, best_model, best_fitness_history = run_genetic_algorithm(executor, predictors, response_variables, 5, 3, 0.2, 5)
+        final_population, best_model, best_fitness_history = run_genetic_algorithm(executor, predictors, response_variables, 32, 10, 0.2, 5)
         best_fitness = best_fitness_history[-1]  # Get the last (highest) fitness from the history
         save_best_predictors(best_model, predictors_df, best_fitness)
         plot_fitness_history(best_fitness_history)

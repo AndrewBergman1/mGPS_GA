@@ -11,3 +11,22 @@ Cities with less than 5 observations: ['newcastle', 'belfast', 'eden', 'islingto
   warnings.warn(
 /sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:350: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+slurmstepd: error: *** JOB 596605 ON cn133 CANCELLED AT 2024-04-27T16:17:05 ***
