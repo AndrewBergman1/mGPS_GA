@@ -170,7 +170,7 @@ def plot_fitness_history(best_fitness_history):
 if __name__ == "__main__":
     predictors_df, predictors, response_variables = load_and_preprocess_data("complete_metadata.csv", "training_data.csv")
     with ProcessPoolExecutor(max_workers=32) as executor:
-        final_population, best_model, best_fitness_history = run_genetic_algorithm(executor, predictors, response_variables, 32, 10, 0.2, 5)
+        final_population, best_model, best_fitness_history = run_genetic_algorithm(executor, predictors, response_variables, 200, 200, 0.2, 5)
         best_fitness = best_fitness_history[-1]  # Get the last (highest) fitness from the history
         save_best_predictors(best_model, predictors_df, best_fitness)
         plot_fitness_history(best_fitness_history)
