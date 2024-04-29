@@ -57,7 +57,7 @@ def parse_city_model(filename):
 # Example usage
 meta_data, validation_data = load_data_file("./complete_metadata.csv", "./testing_data.csv")
 df = import_coordinates(meta_data, validation_data)
-predictors = parse_city_model("best_predictors.txt")
+predictors = parse_city_model("predstest.txt")
 response_variable = "city"
 
 # Check if all predictors are present in the DataFrame

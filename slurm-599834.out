@@ -1,0 +1,19 @@
+Cities with less than 5 observations: ['newcastle', 'belfast', 'eden', 'islington', 'tsuruoka', 'jaywick', 'neg_control', 'sao paulo', 'fukuoka', 'kensington', 'bradford', 'pos_control', 'bristol', 'st_louis', 'cairngorm', 'other']
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 2 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 2 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 5 leaked folder objects to clean up at shutdown
+  warnings.warn(
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 2 leaked folder objects to clean up at shutdown
+  warnings.warn(
+Generation 1 completed with best fitness: 0.6755162241887905
+Generation 2 completed with best fitness: 0.6755162241887905
+Generation 3 completed with best fitness: 0.6755162241887905
+Generation 4 completed with best fitness: 0.6755162241887905
+Generation 5 completed with best fitness: 0.6755162241887905
+Best predictors and accuracy saved to best_predictors.txt
+/sw/easybuild_milan/software/Anaconda3/2024.02-1/lib/python3.11/site-packages/joblib/externals/loky/backend/resource_tracker.py:310: UserWarning: resource_tracker: There appear to be 2 leaked folder objects to clean up at shutdown
+  warnings.warn(
